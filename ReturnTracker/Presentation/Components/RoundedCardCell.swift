@@ -26,7 +26,7 @@ struct RoundedCardCell<Content: View>: View {
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .stroke(Color(.separator), lineWidth: 0.5)
             )
-            .shadow(color: Color.black.opacity(0.04), radius: 8, x: 0, y: 2)
+            .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 2)
     }
 }
 
