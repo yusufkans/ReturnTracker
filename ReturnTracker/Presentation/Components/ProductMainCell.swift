@@ -69,15 +69,15 @@ struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
     }
 }
 
-#Preview {
-    struct PreviewModel: ProductMainCellPresentable {
-        let titleText = "Amazon — Running Shoes"
-        let subtitleText = "Last day: Jan 28, 2026"
-        let badgeText = "9d"
-        let primaryButtonTitle = "Returned"
-        let secondaryButtonTitle = "Archive"
-    }
+private struct PreviewModel: ProductMainCellPresentable {
+    let titleText = "Amazon — Running Shoes"
+    let subtitleText = "Last day: Jan 28, 2026"
+    let badgeText = "9d"
+    let primaryButtonTitle = "Returned"
+    let secondaryButtonTitle = "Archive"
+}
 
+#Preview {
     ProductMainCell(viewModel: PreviewModel(), onPrimaryTap: {}, onSecondaryTap: {})
         .padding()
 }
