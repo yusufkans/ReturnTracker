@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct ContentView: View {
+    private let tabFactory: TabFactory
+
+    init(tabFactory: TabFactory = DefaultTabFactory()) {
+        self.tabFactory = tabFactory
+    }
+
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        TabContainerView(tabFactory: tabFactory)
     }
 }
 
