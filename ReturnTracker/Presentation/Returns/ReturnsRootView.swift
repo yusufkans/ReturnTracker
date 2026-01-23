@@ -1,5 +1,5 @@
 //
-//  ActiveRootView.swift
+//  ReturnsRootView.swift
 //  ReturnTracker
 //
 //  Created by Yusufkan Sürmelioğlu on 19.01.2026.
@@ -16,7 +16,13 @@ struct ActiveReturnItem: Identifiable, ProductMainCellPresentable {
     let secondaryButtonTitle: String
 }
 
-struct ActiveRootView: View {
+enum ReturnsPageSegments: Hashable {
+    case active
+    case archive
+}
+
+struct ReturnsRootView: View {
+    @State var segment: ReturnsPageSegments = .active
     private let items: [ActiveReturnItem] = [
         ActiveReturnItem(
             titleText: "Amazon — Running Shoes",
@@ -36,10 +42,20 @@ struct ActiveRootView: View {
 
     var body: some View {
         ScrollView {
+            Picker("What is your favorite color?", selection: $segment) {
+                Text("Active")
+                    .tag(ReturnsPageSegments.active)
+                Text("Archive")
+                    .tag(ReturnsPageSegments.archive)
+            }
+            .pickerStyle(.segmented)
+            .padding()
+            
             LazyVStack(spacing: 16) {
                 ForEach(items) { item in
                     ProductMainCell(
                         viewModel: item,
+                        onCellTap: {},
                         onPrimaryTap: {},
                         onSecondaryTap: {}
                     )
@@ -47,12 +63,13 @@ struct ActiveRootView: View {
             }
             .padding()
         }
-        .navigationTitle("Active")
+        .navigationTitle("Returns")
+        .navigationBarTitleDisplayMode(.automatic)
     }
 }
 
 #Preview {
     NavigationStack {
-        ActiveRootView()
+        ReturnsRootView()
     }
 }
