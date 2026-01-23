@@ -5,7 +5,6 @@
 //  Created by Yusufkan Sürmelioğlu on 19.01.2026.
 //
 
-import CoreData
 import SwiftUI
 
 enum ReturnsPageSegments: Hashable {
@@ -53,10 +52,7 @@ struct ReturnsRootView: View {
 }
 
 #Preview {
-    let stack = try! CoreDataStack(storeType: NSInMemoryStoreType)
-    let repository = CoreDataReturnItemRepository(store: stack)
-    let viewModel = ReturnsRootViewModel(repository: repository)
     NavigationStack {
-        ReturnsRootView(viewModel: viewModel)
+        ReturnsRootView(viewModel: .preview())
     }
 }

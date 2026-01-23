@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 29.01.2026.
 //
 
+import CoreData
 import Foundation
 
 struct ReturnItemCellViewModel: Identifiable, ProductMainCellPresentable {
@@ -79,3 +80,13 @@ private extension ReturnItemCellViewModel {
         return formatter
     }()
 }
+
+#if DEBUG
+extension ReturnsRootViewModel {
+    static func preview() -> ReturnsRootViewModel {
+        let stack = try! CoreDataStack(storeType: NSInMemoryStoreType)
+        let repository = CoreDataReturnItemRepository(store: stack)
+        return ReturnsRootViewModel(repository: repository)
+    }
+}
+#endif
