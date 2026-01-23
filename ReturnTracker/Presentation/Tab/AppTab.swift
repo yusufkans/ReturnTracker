@@ -8,8 +8,7 @@
 import SwiftUI
 
 enum AppTab: String, CaseIterable, Identifiable {
-    case active
-    case archive
+    case products
     case new
     case settings
 
@@ -17,10 +16,8 @@ enum AppTab: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .active:
-            return "Active"
-        case .archive:
-            return "Archive"
+        case .products:
+            return "Returns"
         case .new:
             return "New"
         case .settings:
@@ -30,10 +27,8 @@ enum AppTab: String, CaseIterable, Identifiable {
 
     var systemImageName: String {
         switch self {
-        case .active:
+        case .products:
             return "tray.fill"
-        case .archive:
-            return "archivebox.fill"
         case .new:
             return "plus.circle.fill"
         case .settings:

@@ -17,19 +17,22 @@ protocol ProductMainCellPresentable {
 
 struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
     private let viewModel: ViewModel
+    private let onCellTap: () -> Void
     private let onPrimaryTap: () -> Void
     private let onSecondaryTap: () -> Void
 
     init(
         viewModel: ViewModel,
+        onCellTap: @escaping () -> Void,
         onPrimaryTap: @escaping () -> Void,
         onSecondaryTap: @escaping () -> Void
     ) {
         self.viewModel = viewModel
+        self.onCellTap = onCellTap
         self.onPrimaryTap = onPrimaryTap
         self.onSecondaryTap = onSecondaryTap
     }
-
+    
     var body: some View {
         RoundedCardCell {
             VStack(alignment: .leading, spacing: 12) {
@@ -58,13 +61,18 @@ struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
                 HStack(spacing: 12) {
                     Button(viewModel.primaryButtonTitle, action: onPrimaryTap)
                         .buttonStyle(.bordered)
-                        .frame(maxWidth: .infinity)
-
+                        .frame(width: .infinity)
+                    
+                    Spacer()
+                    
                     Button(viewModel.secondaryButtonTitle, action: onSecondaryTap)
-                        .buttonStyle(.bordered)
-                        .frame(maxWidth: .infinity)
+                        .buttonStyle(.plain)
+                        .frame(width: .infinity)
                 }
             }
+        }
+        .onTapGesture {
+            onCellTap()
         }
     }
 }
@@ -78,6 +86,6 @@ private struct PreviewModel: ProductMainCellPresentable {
 }
 
 #Preview {
-    ProductMainCell(viewModel: PreviewModel(), onPrimaryTap: {}, onSecondaryTap: {})
+    ProductMainCell(viewModel: PreviewModel(), onCellTap: {}, onPrimaryTap: {}, onSecondaryTap: {})
         .padding()
 }

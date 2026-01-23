@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TabContainerView: View {
     private let tabFactory: TabFactory
-    @State private var selectedTab: AppTab = .active
+    @State private var selectedTab: AppTab = .products
 
     init(tabFactory: TabFactory) {
         self.tabFactory = tabFactory

@@ -14,10 +14,8 @@ protocol TabFactory {
 struct DefaultTabFactory: TabFactory {
     func makeView(for tab: AppTab) -> AnyView {
         switch tab {
-        case .active:
-            return AnyView(NavigationStack { ActiveRootView() })
-        case .archive:
-            return AnyView(NavigationStack { ArchiveRootView() })
+        case .products:
+            return AnyView(NavigationStack { ReturnsRootView() })
         case .new:
             return AnyView(NavigationStack { NewRootView() })
         case .settings:
