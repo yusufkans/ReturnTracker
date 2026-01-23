@@ -59,7 +59,7 @@ struct ReturnsRootView: View {
                     viewModel.load()
                 }
             )
-            .presentationDetents([.medium, .large])
+            .presentationDetents([.large])
             .presentationDragIndicator(.visible)
         }
     }
