@@ -1,6 +1,7 @@
 import CoreData
 import Foundation
 
+@MainActor
 final class CoreDataReturnItemRepository: ReturnItemRepository {
     private let store: CoreDataStoring
 
