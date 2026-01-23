@@ -12,12 +12,19 @@ protocol TabFactory {
 }
 
 struct DefaultTabFactory: TabFactory {
+    private let container: AppDependencyContainer
+
+    init(container: AppDependencyContainer = AppDependencyContainer()) {
+        self.container = container
+    }
+
     func makeView(for tab: AppTab) -> AnyView {
         switch tab {
         case .products:
             return AnyView(NavigationStack { ReturnsRootView() })
         case .new:
-            return AnyView(NavigationStack { NewRootView() })
+            let viewModel = NewReturnItemViewModel(createUseCase: container.createReturnItemUseCase)
+            return AnyView(NavigationStack { NewRootView(viewModel: viewModel) })
         case .settings:
             return AnyView(NavigationStack { SettingsRootView() })
         }
