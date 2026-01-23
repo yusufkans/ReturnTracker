@@ -15,6 +15,7 @@ enum ReturnsPageSegments: Hashable {
 struct ReturnsRootView: View {
     @State var segment: ReturnsPageSegments = .active
     @StateObject private var viewModel: ReturnsRootViewModel
+    @State private var selectedItem: ReturnItem?
 
     init(viewModel: ReturnsRootViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -35,7 +36,9 @@ struct ReturnsRootView: View {
                 ForEach(viewModel.items(for: segment)) { item in
                     ProductMainCell(
                         viewModel: item,
-                        onCellTap: {},
+                        onCellTap: {
+                            selectedItem = item.item
+                        },
                         onPrimaryTap: {},
                         onSecondaryTap: {}
                     )
@@ -48,6 +51,16 @@ struct ReturnsRootView: View {
         .backgroundStyle(Color(.systemGroupedBackground))
         .task {
             viewModel.load()
+        }
+        .sheet(item: $selectedItem) { item in
+            ReturnDetailsView(
+                viewModel: viewModel.makeDetailsViewModel(for: item),
+                onUpdate: {
+                    viewModel.load()
+                }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
         }
     }
 }

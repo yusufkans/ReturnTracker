@@ -16,6 +16,7 @@ struct ReturnItemCellViewModel: Identifiable, ProductMainCellPresentable {
     let badgeText: String
     let primaryButtonTitle: String
     let secondaryButtonTitle: String
+    let item: ReturnItem
 }
 
 @MainActor
@@ -47,6 +48,10 @@ final class ReturnsRootViewModel: ObservableObject {
         }
         return filtered.map { ReturnItemCellViewModel(from: $0) }
     }
+
+    func makeDetailsViewModel(for item: ReturnItem) -> ReturnDetailsViewModel {
+        ReturnDetailsViewModel(item: item, repository: repository)
+    }
 }
 
 private extension ReturnItemCellViewModel {
@@ -57,6 +62,7 @@ private extension ReturnItemCellViewModel {
         badgeText = ReturnItemCellViewModel.makeBadgeText(for: item)
         primaryButtonTitle = item.isReturned ? "Returned" : "Mark Returned"
         secondaryButtonTitle = item.isReturned ? "Unarchive" : "Archive"
+        self.item = item
     }
 
     static func makeSubtitle(for item: ReturnItem) -> String {
