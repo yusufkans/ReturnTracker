@@ -5,16 +5,8 @@
 //  Created by Yusufkan Sürmelioğlu on 19.01.2026.
 //
 
+import CoreData
 import SwiftUI
-
-struct ActiveReturnItem: Identifiable, ProductMainCellPresentable {
-    let id = UUID()
-    let titleText: String
-    let subtitleText: String
-    let badgeText: String
-    let primaryButtonTitle: String
-    let secondaryButtonTitle: String
-}
 
 enum ReturnsPageSegments: Hashable {
     case active
@@ -23,22 +15,11 @@ enum ReturnsPageSegments: Hashable {
 
 struct ReturnsRootView: View {
     @State var segment: ReturnsPageSegments = .active
-    private let items: [ActiveReturnItem] = [
-        ActiveReturnItem(
-            titleText: "Amazon — Running Shoes",
-            subtitleText: "Last day: Jan 28, 2026",
-            badgeText: "9d",
-            primaryButtonTitle: "Returned",
-            secondaryButtonTitle: "Archive"
-        ),
-        ActiveReturnItem(
-            titleText: "Hepsiburada — Coffee Machine",
-            subtitleText: "Last day: Feb 6, 2026",
-            badgeText: "18d",
-            primaryButtonTitle: "Returned",
-            secondaryButtonTitle: "Archive"
-        )
-    ]
+    @StateObject private var viewModel: ReturnsRootViewModel
+
+    init(viewModel: ReturnsRootViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
 
     var body: some View {
         ScrollView {
@@ -52,7 +33,7 @@ struct ReturnsRootView: View {
             .padding()
             
             LazyVStack(spacing: 16) {
-                ForEach(items) { item in
+                ForEach(viewModel.items(for: segment)) { item in
                     ProductMainCell(
                         viewModel: item,
                         onCellTap: {},
@@ -65,11 +46,17 @@ struct ReturnsRootView: View {
         }
         .navigationTitle("Returns")
         .navigationBarTitleDisplayMode(.automatic)
+        .task {
+            viewModel.load()
+        }
     }
 }
 
 #Preview {
+    let stack = try! CoreDataStack(storeType: NSInMemoryStoreType)
+    let repository = CoreDataReturnItemRepository(store: stack)
+    let viewModel = ReturnsRootViewModel(repository: repository)
     NavigationStack {
-        ReturnsRootView()
+        ReturnsRootView(viewModel: viewModel)
     }
 }
