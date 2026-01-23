@@ -5,7 +5,6 @@
 //  Created by Yusufkan Sürmelioğlu on 01.02.2026.
 //
 
-import CoreData
 import SwiftUI
 
 struct ReturnDetailsView: View {
@@ -26,9 +25,11 @@ struct ReturnDetailsView: View {
                     SectionHeaderView(title: "Overview")
 
                     RoundedCardCell {
+                        // Overview info row container.
                         VStack(alignment: .leading, spacing: 16) {
                             InfoRowView(title: "Created", value: viewModel.createdAtText)
                             Divider()
+                            // Status summary row.
                             InfoRowView(
                                 title: "Status",
                                 value: viewModel.isReturned ? "Returned" : "Active"
@@ -41,6 +42,7 @@ struct ReturnDetailsView: View {
                     SectionHeaderView(title: "Details")
 
                     RoundedCardCell {
+                        // Editable detail fields and save action.
                         VStack(alignment: .leading, spacing: 16) {
                             LabeledTextFieldRow(
                                 title: "Item name",
@@ -84,6 +86,7 @@ struct ReturnDetailsView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     SectionHeaderView(title: "Actions")
 
+                    // Primary and secondary actions stacked for quick access.
                     VStack(spacing: 12) {
                         Button(action: {
                             if viewModel.markReturned() {
