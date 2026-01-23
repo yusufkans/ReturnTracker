@@ -21,7 +21,8 @@ struct DefaultTabFactory: TabFactory {
     func makeView(for tab: AppTab) -> AnyView {
         switch tab {
         case .products:
-            return AnyView(NavigationStack { ReturnsRootView() })
+            let viewModel = ReturnsRootViewModel(repository: container.returnItemRepository)
+            return AnyView(NavigationStack { ReturnsRootView(viewModel: viewModel) })
         case .new:
             let viewModel = NewReturnItemViewModel(createUseCase: container.createReturnItemUseCase)
             return AnyView(NavigationStack { NewRootView(viewModel: viewModel) })
