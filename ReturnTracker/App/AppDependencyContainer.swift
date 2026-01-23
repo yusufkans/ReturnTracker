@@ -1,3 +1,10 @@
+//
+//  AppDependencyContainer.swift
+//  ReturnTracker
+//
+//  Created by Yusufkan Sürmelioğlu on 19.01.2026.
+//
+
 import Foundation
 
 final class AppDependencyContainer {
