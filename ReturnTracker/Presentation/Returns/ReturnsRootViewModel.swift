@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 29.01.2026.
 //
 
+import Combine
 import CoreData
 import Foundation
 

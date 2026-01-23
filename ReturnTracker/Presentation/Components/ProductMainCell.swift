@@ -71,6 +71,7 @@ struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
                 }
             }
         }
+        .shadow(color: Color.green, radius: 0.1, x: -4)
         .onTapGesture {
             onCellTap()
         }

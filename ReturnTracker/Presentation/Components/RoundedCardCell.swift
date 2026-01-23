@@ -21,7 +21,6 @@ struct RoundedCardCell<Content: View>: View {
             .background(
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .fill(Color(.systemBackground))
-                    .shadow(color: Color.green, radius: 0.1, x: -4)
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 16, style: .continuous)

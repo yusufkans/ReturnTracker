@@ -45,6 +45,7 @@ struct ReturnsRootView: View {
         }
         .navigationTitle("Returns")
         .navigationBarTitleDisplayMode(.automatic)
+        .backgroundStyle(Color(.systemGroupedBackground))
         .task {
             viewModel.load()
         }
