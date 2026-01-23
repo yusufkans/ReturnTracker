@@ -5,29 +5,19 @@
 //  Created by Yusufkan Sürmelioğlu on 19.01.2026.
 //
 
+import CoreData
 import SwiftUI
 import UniformTypeIdentifiers
 
 struct NewRootView: View {
+    @StateObject private var viewModel: NewReturnItemViewModel
     @State private var isShowingFilePicker = false
     @State private var uploadedFileName: String?
-
-    @State private var itemName = ""
-    @State private var storeName = ""
     @State private var isShowingPurchaseDatePicker = false
     @State private var draftPurchaseDate = Date()
-    @State private var selectedPurchaseDate: Date?
 
-    @State private var reminderSevenDaysBefore = true
-    @State private var reminderTwoDaysBefore = true
-    @State private var reminderLastDay = true
-
-    private var purchaseDateText: String {
-        guard let selectedPurchaseDate else {
-            return "Select date"
-        }
-
-        return selectedPurchaseDate.formatted(date: .abbreviated, time: .omitted)
+    init(viewModel: NewReturnItemViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
 
     var body: some View {
@@ -53,7 +43,7 @@ struct NewRootView: View {
                             LabeledTextFieldRow(
                                 title: "Item name",
                                 placeholder: "e.g., Wireless Headphones",
-                                text: $itemName
+                                text: $viewModel.itemName
                             )
 
                             Divider()
@@ -61,18 +51,29 @@ struct NewRootView: View {
                             LabeledTextFieldRow(
                                 title: "Store name",
                                 placeholder: "e.g., Apple Store",
-                                text: $storeName
+                                text: $viewModel.storeName
                             )
 
                             Divider()
 
                             SelectableRow(
                                 title: "Purchase date",
-                                value: purchaseDateText
+                                value: viewModel.purchaseDateText
                             ) {
-                                draftPurchaseDate = selectedPurchaseDate ?? Date()
+                                draftPurchaseDate = viewModel.selectedPurchaseDate ?? Date()
                                 isShowingPurchaseDatePicker = true
                             }
+
+                            Divider()
+
+                            Button(action: {
+                                viewModel.save()
+                            }) {
+                                Text("Save Item")
+                                    .frame(maxWidth: .infinity)
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .disabled(viewModel.itemName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                         }
                     }
                 }
@@ -87,20 +88,27 @@ struct NewRootView: View {
                     ) {
                         ReminderChipView(
                             title: "7 days before",
-                            isSelected: $reminderSevenDaysBefore
+                            isSelected: $viewModel.reminderSevenDaysBefore
                         )
                         ReminderChipView(
                             title: "2 days before",
-                            isSelected: $reminderTwoDaysBefore
+                            isSelected: $viewModel.reminderTwoDaysBefore
                         )
                         ReminderChipView(
                             title: "On last day",
-                            isSelected: $reminderLastDay
+                            isSelected: $viewModel.reminderLastDay
                         )
                     }
                 }
             }
             .padding()
+        }
+        .alert(item: $viewModel.alert) { alert in
+            Alert(
+                title: Text(alert.title),
+                message: alert.message.map { Text($0) },
+                dismissButton: .default(Text("OK"))
+            )
         }
         .navigationTitle("Quick Add")
         .fileImporter(
@@ -119,7 +127,7 @@ struct NewRootView: View {
                 title: "Purchase date",
                 selection: $draftPurchaseDate,
                 onSave: {
-                    selectedPurchaseDate = draftPurchaseDate
+                    viewModel.selectedPurchaseDate = draftPurchaseDate
                     isShowingPurchaseDatePicker = false
                 },
                 onCancel: {
@@ -132,6 +140,8 @@ struct NewRootView: View {
 
 #Preview {
     NavigationStack {
-        NewRootView()
+        let repository = CoreDataReturnItemRepository(store: try! CoreDataStack(storeType: NSInMemoryStoreType))
+        let useCase = DefaultCreateReturnItemUseCase(repository: repository)
+        NewRootView(viewModel: NewReturnItemViewModel(createUseCase: useCase))
     }
 }
