@@ -155,6 +155,35 @@ private struct InfoRowView: View {
     }
 }
 
+#if DEBUG
+private final class PreviewReturnItemRepository: ReturnItemRepository {
+    private var items: [ReturnItem]
+
+    init(items: [ReturnItem]) {
+        self.items = items
+    }
+
+    func fetchAll() throws -> [ReturnItem] {
+        items
+    }
+
+    func fetchActive() throws -> [ReturnItem] {
+        items.filter { $0.isReturned == false }
+    }
+
+    func save(_ item: ReturnItem) throws {
+        if let index = items.firstIndex(where: { $0.id == item.id }) {
+            items[index] = item
+        } else {
+            items.append(item)
+        }
+    }
+
+    func delete(id: UUID) throws {
+        items.removeAll { $0.id == id }
+    }
+}
+
 #Preview {
     let item = ReturnItem(
         title: "Wireless Headphones",
@@ -163,6 +192,7 @@ private struct InfoRowView: View {
         returnDate: Calendar.current.date(byAdding: .day, value: 4, to: Date()),
         isReturned: false
     )
-    let repository = CoreDataReturnItemRepository(store: try! CoreDataStack(storeType: NSInMemoryStoreType))
+    let repository = PreviewReturnItemRepository(items: [item])
     ReturnDetailsView(viewModel: ReturnDetailsViewModel(item: item, repository: repository)) {}
 }
+#endif
