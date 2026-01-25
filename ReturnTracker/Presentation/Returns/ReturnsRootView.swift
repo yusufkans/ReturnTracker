@@ -16,14 +16,18 @@ struct ReturnsRootView: View {
     @State var segment: ReturnsPageSegments = .active
     @StateObject private var viewModel: ReturnsRootViewModel
     @State private var selectedItem: ReturnItem?
-    @State private var toastMessage: String?
+    @State private var toast: ToastState?
+    @State private var toastTask: Task<Void, Never>?
 
     init(viewModel: ReturnsRootViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
+    private var displayedItems: [ReturnItemCellViewModel] {
+        viewModel.items(for: segment)
+    }
+
     var body: some View {
-        let items = viewModel.items(for: segment)
         ScrollView {
             Picker("What is your favorite color?", selection: $segment) {
                 Text("Active")
@@ -35,30 +39,27 @@ struct ReturnsRootView: View {
             .padding()
             
             LazyVStack(spacing: 16) {
-                ForEach(items) { item in
+                ForEach(displayedItems) { item in
                     ProductMainCell(
                         viewModel: item,
                         onCellTap: {
                             selectedItem = item.item
                         },
                         onPrimaryTap: {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                            withAnimation(AppAnimation.action) {
                                 viewModel.markReturned(for: item.item)
                             }
                             showToast(message: "Marked as returned")
                         },
                         onSecondaryTap: {
                             let message = item.item.isReturned ? "Unarchived" : "Archived"
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                            withAnimation(AppAnimation.action) {
                                 viewModel.toggleArchive(for: item.item)
                             }
                             showToast(message: message)
                         }
                     )
-                    .transition(.asymmetric(
-                        insertion: .opacity.combined(with: .scale(scale: 0.98)),
-                        removal: .opacity.combined(with: .move(edge: .trailing))
-                    ))
+                    .transition(AppAnimation.listItemTransition)
                 }
             }
             .padding()
@@ -67,13 +68,13 @@ struct ReturnsRootView: View {
         .navigationBarTitleDisplayMode(.automatic)
         .backgroundStyle(Color(.systemGroupedBackground))
         .overlay(alignment: .top) {
-            if let toastMessage {
-                ToastView(message: toastMessage)
-                    .transition(.move(edge: .top).combined(with: .opacity))
+            if let toast {
+                ToastView(message: toast.message)
+                    .transition(AppAnimation.toastTransition)
                     .padding(.top, 8)
             }
         }
-        .animation(.spring(response: 0.3, dampingFraction: 0.85), value: items.map(\.id))
+        .animation(AppAnimation.action, value: displayedItems.map(\.id))
         .task {
             viewModel.load()
         }
@@ -90,32 +91,17 @@ struct ReturnsRootView: View {
     }
 
     private func showToast(message: String) {
-        withAnimation(.easeInOut(duration: 0.2)) {
-            toastMessage = message
+        toastTask?.cancel()
+        withAnimation(AppAnimation.toastFade) {
+            toast = ToastState(message: message)
         }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            withAnimation(.easeInOut(duration: 0.2)) {
-                toastMessage = nil
+        toastTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 1_200_000_000)
+            guard !Task.isCancelled else { return }
+            withAnimation(AppAnimation.toastFade) {
+                toast = nil
             }
         }
-    }
-}
-
-private struct ToastView: View {
-    let message: String
-
-    var body: some View {
-        Text(message)
-            .font(.subheadline.weight(.semibold))
-            .foregroundStyle(.primary)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 10)
-            .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(Color(.systemBackground))
-                    .shadow(color: Color.black.opacity(0.12), radius: 6, x: 0, y: 2)
-            )
-            .accessibilityLabel(message)
     }
 }
 
