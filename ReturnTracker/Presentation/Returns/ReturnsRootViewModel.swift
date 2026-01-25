@@ -22,8 +22,10 @@ struct ReturnItemCellViewModel: Identifiable, ProductMainCellPresentable {
 @MainActor
 final class ReturnsRootViewModel: ObservableObject {
     @Published private(set) var items: [ReturnItem] = []
+    @Published var toast: ToastState?
 
     private let repository: ReturnItemRepository
+    private var toastTask: Task<Void, Never>?
 
     init(repository: ReturnItemRepository) {
         self.repository = repository
@@ -61,6 +63,16 @@ final class ReturnsRootViewModel: ObservableObject {
 
     func makeDetailsViewModel(for item: ReturnItem) -> ReturnDetailsViewModel {
         ReturnDetailsViewModel(item: item, repository: repository)
+    }
+
+    func showToast(message: String) {
+        toastTask?.cancel()
+        toast = ToastState(message: message)
+        toastTask = Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 1_200_000_000)
+            guard !Task.isCancelled else { return }
+            toast = nil
+        }
     }
 
     @discardableResult
