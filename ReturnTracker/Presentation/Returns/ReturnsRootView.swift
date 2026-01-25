@@ -72,7 +72,6 @@ struct ReturnsRootView: View {
                     .padding(.top, 8)
             }
         }
-        .animation(AppAnimation.action, value: displayedItems.map(\.id))
         .animation(AppAnimation.toastFade, value: viewModel.toast?.id)
         .task {
             viewModel.load()
