@@ -22,11 +22,15 @@ struct ReturnItemCellViewModel: Identifiable, ProductMainCellPresentable {
 @MainActor
 final class ReturnsRootViewModel: ObservableObject {
     @Published private(set) var items: [ReturnItem] = []
+    @Published var toast: ToastState?
 
     private let repository: ReturnItemRepository
+    private let toastScheduler: ToastScheduler
+    private var toastTask: Task<Void, Never>?
 
-    init(repository: ReturnItemRepository) {
+    init(repository: ReturnItemRepository, toastScheduler: ToastScheduler = DefaultToastScheduler()) {
         self.repository = repository
+        self.toastScheduler = toastScheduler
     }
 
     func load() {
@@ -49,8 +53,39 @@ final class ReturnsRootViewModel: ObservableObject {
         return filtered.map { ReturnItemCellViewModel(from: $0) }
     }
 
+    @discardableResult
+    func markReturned(for item: ReturnItem) -> Bool {
+        updateReturnStatus(for: item, isReturned: true)
+    }
+
+    @discardableResult
+    func toggleArchive(for item: ReturnItem) -> Bool {
+        updateReturnStatus(for: item, isReturned: item.isReturned == false)
+    }
+
     func makeDetailsViewModel(for item: ReturnItem) -> ReturnDetailsViewModel {
         ReturnDetailsViewModel(item: item, repository: repository)
+    }
+
+    func showToast(message: String) {
+        toastTask?.cancel()
+        toast = ToastState(message: message)
+        toastTask = toastScheduler.schedule(after: 1_200_000_000) { [weak self] in
+            self?.toast = nil
+        }
+    }
+
+    @discardableResult
+    private func updateReturnStatus(for item: ReturnItem, isReturned: Bool) -> Bool {
+        var updatedItem = item
+        updatedItem.isReturned = isReturned
+        do {
+            try repository.save(updatedItem)
+            load()
+            return true
+        } catch {
+            return false
+        }
     }
 }
 

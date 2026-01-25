@@ -21,6 +21,10 @@ struct ReturnsRootView: View {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
+    private var displayedItems: [ReturnItemCellViewModel] {
+        viewModel.items(for: segment)
+    }
+
     var body: some View {
         ScrollView {
             Picker("What is your favorite color?", selection: $segment) {
@@ -33,15 +37,27 @@ struct ReturnsRootView: View {
             .padding()
             
             LazyVStack(spacing: 16) {
-                ForEach(viewModel.items(for: segment)) { item in
+                ForEach(displayedItems) { item in
                     ProductMainCell(
                         viewModel: item,
                         onCellTap: {
                             selectedItem = item.item
                         },
-                        onPrimaryTap: {},
-                        onSecondaryTap: {}
+                        onPrimaryTap: {
+                            withAnimation(AppAnimation.action) {
+                                viewModel.markReturned(for: item.item)
+                            }
+                            viewModel.showToast(message: "Marked as returned")
+                        },
+                        onSecondaryTap: {
+                            let message = item.item.isReturned ? "Unarchived" : "Archived"
+                            withAnimation(AppAnimation.action) {
+                                viewModel.toggleArchive(for: item.item)
+                            }
+                            viewModel.showToast(message: message)
+                        }
                     )
+                    .transition(AppAnimation.listItemTransition)
                 }
             }
             .padding()
@@ -49,6 +65,14 @@ struct ReturnsRootView: View {
         .navigationTitle("Returns")
         .navigationBarTitleDisplayMode(.automatic)
         .backgroundStyle(Color(.systemGroupedBackground))
+        .overlay(alignment: .bottom) {
+            if let toast = viewModel.toast {
+                ToastView(message: toast.message)
+                    .transition(AppAnimation.toastTransition)
+                    .padding(.bottom, 32)
+            }
+        }
+        .animation(AppAnimation.toastFade, value: viewModel.toast?.id)
         .task {
             viewModel.load()
         }
