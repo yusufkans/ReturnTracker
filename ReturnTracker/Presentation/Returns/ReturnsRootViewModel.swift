@@ -25,10 +25,12 @@ final class ReturnsRootViewModel: ObservableObject {
     @Published var toast: ToastState?
 
     private let repository: ReturnItemRepository
+    private let toastScheduler: ToastScheduler
     private var toastTask: Task<Void, Never>?
 
-    init(repository: ReturnItemRepository) {
+    init(repository: ReturnItemRepository, toastScheduler: ToastScheduler = DefaultToastScheduler()) {
         self.repository = repository
+        self.toastScheduler = toastScheduler
     }
 
     func load() {
@@ -68,10 +70,8 @@ final class ReturnsRootViewModel: ObservableObject {
     func showToast(message: String) {
         toastTask?.cancel()
         toast = ToastState(message: message)
-        toastTask = Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 1_200_000_000)
-            guard !Task.isCancelled else { return }
-            toast = nil
+        toastTask = toastScheduler.schedule(after: 1_200_000_000) { [weak self] in
+            self?.toast = nil
         }
     }
 
