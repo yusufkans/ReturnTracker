@@ -39,8 +39,12 @@ struct ReturnsRootView: View {
                         onCellTap: {
                             selectedItem = item.item
                         },
-                        onPrimaryTap: {},
-                        onSecondaryTap: {}
+                        onPrimaryTap: {
+                            viewModel.markReturned(for: item.item)
+                        },
+                        onSecondaryTap: {
+                            viewModel.toggleArchive(for: item.item)
+                        }
                     )
                 }
             }

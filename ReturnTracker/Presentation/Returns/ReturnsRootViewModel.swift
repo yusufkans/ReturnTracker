@@ -49,8 +49,31 @@ final class ReturnsRootViewModel: ObservableObject {
         return filtered.map { ReturnItemCellViewModel(from: $0) }
     }
 
+    @discardableResult
+    func markReturned(for item: ReturnItem) -> Bool {
+        updateReturnStatus(for: item, isReturned: true)
+    }
+
+    @discardableResult
+    func toggleArchive(for item: ReturnItem) -> Bool {
+        updateReturnStatus(for: item, isReturned: item.isReturned == false)
+    }
+
     func makeDetailsViewModel(for item: ReturnItem) -> ReturnDetailsViewModel {
         ReturnDetailsViewModel(item: item, repository: repository)
+    }
+
+    @discardableResult
+    private func updateReturnStatus(for item: ReturnItem, isReturned: Bool) -> Bool {
+        var updatedItem = item
+        updatedItem.isReturned = isReturned
+        do {
+            try repository.save(updatedItem)
+            load()
+            return true
+        } catch {
+            return false
+        }
     }
 }
 
