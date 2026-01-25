@@ -65,11 +65,11 @@ struct ReturnsRootView: View {
         .navigationTitle("Returns")
         .navigationBarTitleDisplayMode(.automatic)
         .backgroundStyle(Color(.systemGroupedBackground))
-        .overlay(alignment: .top) {
+        .overlay(alignment: .bottom) {
             if let toast = viewModel.toast {
                 ToastView(message: toast.message)
                     .transition(AppAnimation.toastTransition)
-                    .padding(.top, 8)
+                    .padding(.bottom, 32)
             }
         }
         .animation(AppAnimation.toastFade, value: viewModel.toast?.id)
