@@ -28,10 +28,10 @@ struct ReturnsRootView: View {
 
     var body: some View {
         ScrollView {
-            Picker(NSLocalizedString("returns.segment.picker", comment: "Returns segment picker accessibility title"), selection: $segment) {
-                Text(NSLocalizedString("returns.segment.active", comment: "Active segment title"))
+            Picker(L10n.Returns.segmentPicker, selection: $segment) {
+                Text(L10n.Returns.segmentActive)
                     .tag(ReturnsPageSegments.active)
-                Text(NSLocalizedString("returns.segment.archive", comment: "Archive segment title"))
+                Text(L10n.Returns.segmentArchive)
                     .tag(ReturnsPageSegments.archive)
             }
             .pickerStyle(.segmented)
@@ -48,12 +48,12 @@ struct ReturnsRootView: View {
                             withAnimation(AppAnimation.action) {
                                 viewModel.markReturned(for: item.item)
                             }
-                            viewModel.showToast(message: NSLocalizedString("toast.marked_as_returned", comment: "Toast for mark returned action"))
+                            viewModel.showToast(message: L10n.Toast.markedAsReturned)
                         },
                         onSecondaryTap: {
                             let message = item.item.isReturned
-                                ? NSLocalizedString("toast.unarchived", comment: "Toast for unarchive action")
-                                : NSLocalizedString("toast.archived", comment: "Toast for archive action")
+                                ? L10n.Toast.unarchived
+                                : L10n.Toast.archived
                             withAnimation(AppAnimation.action) {
                                 viewModel.toggleArchive(for: item.item)
                             }
@@ -65,7 +65,7 @@ struct ReturnsRootView: View {
             }
             .padding()
         }
-        .navigationTitle(NSLocalizedString("returns.title", comment: "Returns screen title"))
+        .navigationTitle(L10n.Returns.title)
         .navigationBarTitleDisplayMode(.automatic)
         .backgroundStyle(Color(.systemGroupedBackground))
         .overlay(alignment: .bottom) {

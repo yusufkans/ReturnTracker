@@ -34,9 +34,9 @@ struct RoundedCardCell<Content: View>: View {
 #Preview {
     RoundedCardCell {
         VStack(alignment: .leading, spacing: 8) {
-            Text(NSLocalizedString("preview.product_title", comment: "Preview product title"))
+            Text(L10n.Preview.productTitle)
                 .font(.headline)
-            Text(NSLocalizedString("preview.product_subtitle", comment: "Preview product subtitle"))
+            Text(L10n.Preview.productSubtitle)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }

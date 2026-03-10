@@ -42,11 +42,11 @@ struct DatePickerSheetView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(NSLocalizedString("common.cancel", comment: "Cancel button title"), action: onCancel)
+                    Button(L10n.Common.cancel, action: onCancel)
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(NSLocalizedString("common.save", comment: "Save button title"), action: onSave)
+                    Button(L10n.Common.save, action: onSave)
                 }
             }
         }
@@ -55,7 +55,7 @@ struct DatePickerSheetView: View {
 
 #Preview {
     DatePickerSheetView(
-        title: NSLocalizedString("new.purchase_date", comment: "Purchase date picker title"),
+        title: L10n.New.purchaseDate,
         selection: .constant(Date()),
         onSave: {},
         onCancel: {}

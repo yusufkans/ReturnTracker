@@ -18,11 +18,11 @@ enum AppTab: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .products:
-            return NSLocalizedString("tab.returns", comment: "Returns tab title")
+            return L10n.Tab.returnsTitle
         case .new:
-            return NSLocalizedString("tab.new", comment: "New tab title")
+            return L10n.Tab.newTitle
         case .settings:
-            return NSLocalizedString("tab.settings", comment: "Settings tab title")
+            return L10n.Tab.settingsTitle
         }
     }
 

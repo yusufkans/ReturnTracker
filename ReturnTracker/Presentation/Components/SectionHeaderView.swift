@@ -25,6 +25,6 @@ struct SectionHeaderView: View {
 }
 
 #Preview {
-    SectionHeaderView(title: NSLocalizedString("new.manual_add", comment: "Manual add section title"))
+    SectionHeaderView(title: L10n.New.manualAdd)
         .padding()
 }

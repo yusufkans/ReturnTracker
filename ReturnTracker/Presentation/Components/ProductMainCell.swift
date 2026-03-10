@@ -80,11 +80,11 @@ struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
 }
 
 private struct PreviewModel: ProductMainCellPresentable {
-    let titleText = NSLocalizedString("preview.product_title", comment: "Preview product title")
-    let subtitleText = NSLocalizedString("preview.product_subtitle", comment: "Preview product subtitle")
-    let badgeText = NSLocalizedString("preview.product_badge", comment: "Preview product badge")
-    let primaryButtonTitle = NSLocalizedString("returns.action.returned", comment: "Returned action title")
-    let secondaryButtonTitle = NSLocalizedString("returns.action.archive", comment: "Archive action title")
+    let titleText = L10n.Preview.productTitle
+    let subtitleText = L10n.Preview.productSubtitle
+    let badgeText = L10n.Preview.productBadge
+    let primaryButtonTitle = L10n.Returns.actionReturned
+    let secondaryButtonTitle = L10n.Returns.actionArchive
 }
 
 #Preview {

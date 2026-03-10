@@ -44,8 +44,8 @@ struct SelectableRow: View {
 
 #Preview {
     SelectableRow(
-        title: NSLocalizedString("new.purchase_date", comment: "Purchase date field label"),
-        value: NSLocalizedString("common.select_date", comment: "Date selection placeholder")
+        title: L10n.New.purchaseDate,
+        value: L10n.Common.selectDate
     ) {}
         .padding()
 }

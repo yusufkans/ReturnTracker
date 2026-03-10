@@ -23,48 +23,48 @@ struct ReturnDetailsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: NSLocalizedString("details.overview", comment: "Overview section header"))
+                    SectionHeaderView(title: L10n.Details.overview)
 
                     RoundedCardCell {
                         // Overview info row container.
                         VStack(alignment: .leading, spacing: 16) {
-                            InfoRowView(title: NSLocalizedString("details.created", comment: "Created row title"), value: viewModel.createdAtText)
+                            InfoRowView(title: L10n.Details.created, value: viewModel.createdAtText)
                             Divider()
                             // Status summary row.
                             InfoRowView(
-                                title: NSLocalizedString("details.status", comment: "Status row title"),
+                                title: L10n.Details.status,
                                 value: viewModel.isReturned
-                                    ? NSLocalizedString("returns.status.returned", comment: "Returned status text")
-                                    : NSLocalizedString("returns.status.active", comment: "Active status text")
+                                    ? L10n.Returns.statusReturned
+                                    : L10n.Returns.statusActive
                             )
                         }
                     }
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: NSLocalizedString("details.section.title", comment: "Details section header"))
+                    SectionHeaderView(title: L10n.Details.sectionTitle)
 
                     RoundedCardCell {
                         // Editable detail fields and save action.
                         VStack(alignment: .leading, spacing: 16) {
                             LabeledTextFieldRow(
-                                title: NSLocalizedString("new.item_name", comment: "Item name field label"),
-                                placeholder: NSLocalizedString("new.item_name.placeholder", comment: "Item name placeholder"),
+                                title: L10n.New.itemName,
+                                placeholder: L10n.New.itemNamePlaceholder,
                                 text: $viewModel.itemName
                             )
 
                             Divider()
 
                             LabeledTextFieldRow(
-                                title: NSLocalizedString("new.store_name", comment: "Store name field label"),
-                                placeholder: NSLocalizedString("new.store_name.placeholder", comment: "Store name placeholder"),
+                                title: L10n.New.storeName,
+                                placeholder: L10n.New.storeNamePlaceholder,
                                 text: $viewModel.storeName
                             )
 
                             Divider()
 
                             SelectableRow(
-                                title: NSLocalizedString("details.return_date", comment: "Return date field label"),
+                                title: L10n.Details.returnDate,
                                 value: viewModel.returnDateText
                             ) {
                                 draftReturnDate = viewModel.returnDate ?? Date()
@@ -78,7 +78,7 @@ struct ReturnDetailsView: View {
                                     onUpdate()
                                 }
                             }) {
-                                Text(NSLocalizedString("details.action.save_changes", comment: "Save changes button title"))
+                                Text(L10n.Details.saveChanges)
                                     .frame(maxWidth: .infinity)
                             }
                             .buttonStyle(.borderedProminent)
@@ -87,7 +87,7 @@ struct ReturnDetailsView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: NSLocalizedString("details.actions", comment: "Actions section header"))
+                    SectionHeaderView(title: L10n.Details.actions)
 
                     // Primary and secondary actions stacked for quick access.
                     VStack(spacing: 12) {
@@ -96,7 +96,7 @@ struct ReturnDetailsView: View {
                                 onUpdate()
                             }
                         }) {
-                            Text(NSLocalizedString("returns.action.mark_returned", comment: "Mark returned button title"))
+                            Text(L10n.Returns.actionMarkReturned)
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
@@ -106,7 +106,7 @@ struct ReturnDetailsView: View {
                                 onUpdate()
                             }
                         }) {
-                            Text(NSLocalizedString("returns.action.archive", comment: "Archive button title"))
+                            Text(L10n.Returns.actionArchive)
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
@@ -120,12 +120,12 @@ struct ReturnDetailsView: View {
             Alert(
                 title: Text(alert.title),
                 message: alert.message.map { Text($0) },
-                dismissButton: .default(Text(NSLocalizedString("common.ok", comment: "OK button title")))
+                dismissButton: .default(Text(L10n.Common.ok))
             )
         }
         .sheet(isPresented: $isShowingReturnDatePicker) {
             DatePickerSheetView(
-                title: NSLocalizedString("details.return_date", comment: "Return date picker title"),
+                title: L10n.Details.returnDate,
                 selection: $draftReturnDate,
                 onSave: {
                     viewModel.returnDate = draftReturnDate
@@ -190,8 +190,8 @@ private final class PreviewReturnItemRepository: ReturnItemRepository {
 
 #Preview {
     let item = ReturnItem(
-        title: NSLocalizedString("preview.item_name", comment: "Preview item name"),
-        detail: NSLocalizedString("preview.store_name", comment: "Preview store name"),
+        title: L10n.Preview.itemName,
+        detail: L10n.Preview.storeName,
         createdAt: Date(),
         returnDate: Calendar.current.date(byAdding: .day, value: 4, to: Date()),
         isReturned: false
@@ -200,3 +200,4 @@ private final class PreviewReturnItemRepository: ReturnItemRepository {
     ReturnDetailsView(viewModel: ReturnDetailsViewModel(item: item, repository: repository)) {}
 }
 #endif
+

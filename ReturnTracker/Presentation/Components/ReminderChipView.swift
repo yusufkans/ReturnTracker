@@ -45,7 +45,7 @@ struct ReminderChipView: View {
 
 #Preview {
     ReminderChipView(
-        title: NSLocalizedString("new.reminder.seven_days", comment: "Reminder option for seven days before"),
+        title: L10n.New.reminderSevenDays,
         isSelected: .constant(true)
     )
     .padding()

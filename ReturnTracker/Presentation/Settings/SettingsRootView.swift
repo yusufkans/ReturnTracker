@@ -14,11 +14,11 @@ struct SettingsRootView: View {
             Image(systemName: "gearshape.fill")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text(NSLocalizedString("settings.title", comment: "Settings screen title"))
+            Text(L10n.Settings.title)
                 .font(.headline)
         }
         .padding()
-        .navigationTitle(NSLocalizedString("settings.title", comment: "Settings navigation title"))
+        .navigationTitle(L10n.Settings.title)
     }
 }
 

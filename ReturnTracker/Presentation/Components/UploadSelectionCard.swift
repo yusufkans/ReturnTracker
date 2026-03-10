@@ -53,8 +53,8 @@ struct UploadSelectionCard: View {
 
 #Preview {
     UploadSelectionCard(
-        title: NSLocalizedString("new.upload.title", comment: "Upload card title"),
-        subtitle: NSLocalizedString("new.upload.subtitle.short", comment: "Upload card subtitle")
+        title: L10n.New.uploadTitle,
+        subtitle: L10n.New.uploadSubtitleShort
     ) {}
     .padding()
 }

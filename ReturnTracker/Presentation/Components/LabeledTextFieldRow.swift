@@ -34,8 +34,8 @@ struct LabeledTextFieldRow: View {
 
 #Preview {
     LabeledTextFieldRow(
-        title: NSLocalizedString("new.item_name", comment: "Item name field label"),
-        placeholder: NSLocalizedString("new.item_name.placeholder", comment: "Item name placeholder"),
+        title: L10n.New.itemName,
+        placeholder: L10n.New.itemNamePlaceholder,
         text: .constant("")
     )
     .padding()

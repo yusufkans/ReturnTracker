@@ -96,29 +96,27 @@ private extension ReturnItemCellViewModel {
         subtitleText = ReturnItemCellViewModel.makeSubtitle(for: item)
         badgeText = ReturnItemCellViewModel.makeBadgeText(for: item)
         primaryButtonTitle = item.isReturned
-            ? NSLocalizedString("returns.action.returned", comment: "Returned action title")
-            : NSLocalizedString("returns.action.mark_returned", comment: "Mark returned action title")
+            ? L10n.Returns.actionReturned
+            : L10n.Returns.actionMarkReturned
         secondaryButtonTitle = item.isReturned
-            ? NSLocalizedString("returns.action.unarchive", comment: "Unarchive action title")
-            : NSLocalizedString("returns.action.archive", comment: "Archive action title")
+            ? L10n.Returns.actionUnarchive
+            : L10n.Returns.actionArchive
         self.item = item
     }
 
     static func makeSubtitle(for item: ReturnItem) -> String {
         guard let returnDate = item.returnDate else {
-            return NSLocalizedString("returns.date.tbd", comment: "Return date unavailable text")
+            return L10n.Returns.dateTBD
         }
-        let format = NSLocalizedString("returns.last_day.format", comment: "Last day format with date")
-        return String(format: format, dateFormatter.string(from: returnDate))
+        return L10n.Returns.lastDay(dateFormatter.string(from: returnDate))
     }
 
     static func makeBadgeText(for item: ReturnItem) -> String {
         guard let returnDate = item.returnDate else {
-            return NSLocalizedString("common.dash", comment: "Placeholder dash")
+            return L10n.Common.dash
         }
         let days = Calendar.current.dateComponents([.day], from: Date(), to: returnDate).day ?? 0
-        let format = NSLocalizedString("returns.badge.days.format", comment: "Days remaining badge format")
-        return String(format: format, max(days, 0))
+        return L10n.Returns.daysBadge(max(days, 0))
     }
 
     static let dateFormatter: DateFormatter = {
