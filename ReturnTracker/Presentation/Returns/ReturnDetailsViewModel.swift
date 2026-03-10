@@ -20,18 +20,34 @@ final class ReturnDetailsViewModel: ObservableObject {
     @Published var storeName: String
     @Published var returnDate: Date?
     @Published private(set) var isReturned: Bool
+    @Published private(set) var isArchived: Bool
     @Published var alert: ReturnDetailsAlertState?
 
     private let repository: ReturnItemRepository
+    private let statusPolicy: ReturnItemStatusEvaluating
     private let originalItem: ReturnItem
 
-    init(item: ReturnItem, repository: ReturnItemRepository) {
+    init(
+        item: ReturnItem,
+        repository: ReturnItemRepository,
+        statusPolicy: ReturnItemStatusEvaluating = ReturnItemStatusPolicy()
+    ) {
         self.originalItem = item
         self.repository = repository
+        self.statusPolicy = statusPolicy
         self.itemName = item.title
         self.storeName = item.detail ?? ""
         self.returnDate = item.returnDate
         self.isReturned = item.isReturned
+        self.isArchived = item.isArchived
+    }
+
+    var canMarkReturned: Bool {
+        statusPolicy.canMarkReturned(currentItem())
+    }
+
+    var canArchive: Bool {
+        currentItem().isArchived == false
     }
 
     var createdAtText: String {
@@ -65,7 +81,8 @@ final class ReturnDetailsViewModel: ObservableObject {
             detail: detail,
             createdAt: originalItem.createdAt,
             returnDate: returnDate,
-            isReturned: isReturned
+            isReturned: isReturned,
+            isArchived: isArchived
         )
 
         do {
@@ -86,14 +103,35 @@ final class ReturnDetailsViewModel: ObservableObject {
 
     @discardableResult
     func markReturned() -> Bool {
-        isReturned = true
+        guard canMarkReturned else {
+            return false
+        }
+        let updatedItem = statusPolicy.markReturned(currentItem())
+        isReturned = updatedItem.isReturned
+        isArchived = updatedItem.isArchived
         return save()
     }
 
     @discardableResult
     func archive() -> Bool {
-        isReturned = true
+        guard canArchive else {
+            return false
+        }
+        let updatedItem = statusPolicy.archive(currentItem())
+        isReturned = updatedItem.isReturned
+        isArchived = updatedItem.isArchived
         return save()
     }
-}
 
+    private func currentItem() -> ReturnItem {
+        ReturnItem(
+            id: originalItem.id,
+            title: itemName,
+            detail: storeName,
+            createdAt: originalItem.createdAt,
+            returnDate: returnDate,
+            isReturned: isReturned,
+            isArchived: isArchived
+        )
+    }
+}

@@ -14,6 +14,8 @@ protocol ProductMainCellPresentable {
     var badgeText: String { get }
     var primaryButtonTitle: String { get }
     var secondaryButtonTitle: String { get }
+    var isPrimaryButtonEnabled: Bool { get }
+    var isSecondaryButtonEnabled: Bool { get }
 }
 
 struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
@@ -62,12 +64,14 @@ struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
                 HStack(spacing: 12) {
                     Button(viewModel.primaryButtonTitle, action: onPrimaryTap)
                         .buttonStyle(.bordered)
+                        .disabled(viewModel.isPrimaryButtonEnabled == false)
                         .frame(width: .infinity)
                     
                     Spacer()
                     
                     Button(viewModel.secondaryButtonTitle, action: onSecondaryTap)
                         .buttonStyle(.plain)
+                        .disabled(viewModel.isSecondaryButtonEnabled == false)
                         .frame(width: .infinity)
                 }
             }
@@ -85,6 +89,8 @@ private struct PreviewModel: ProductMainCellPresentable {
     let badgeText = L10n.Preview.productBadge
     let primaryButtonTitle = L10n.Returns.actionReturned
     let secondaryButtonTitle = L10n.Returns.actionArchive
+    let isPrimaryButtonEnabled = true
+    let isSecondaryButtonEnabled = true
 }
 
 #Preview {

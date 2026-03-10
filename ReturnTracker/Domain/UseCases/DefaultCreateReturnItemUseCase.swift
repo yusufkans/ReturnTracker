@@ -20,7 +20,8 @@ struct DefaultCreateReturnItemUseCase: CreateReturnItemUseCase {
             detail: request.detail,
             createdAt: Date(),
             returnDate: request.returnDate,
-            isReturned: false
+            isReturned: false,
+            isArchived: false
         )
         try repository.save(item)
     }

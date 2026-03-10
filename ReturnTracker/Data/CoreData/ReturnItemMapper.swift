@@ -15,7 +15,8 @@ enum ReturnItemMapper {
             detail: managed.detail,
             createdAt: managed.createdAt,
             returnDate: managed.returnDate,
-            isReturned: managed.isReturned
+            isReturned: managed.isReturned,
+            isArchived: managed.isArchived
         )
     }
 
@@ -26,5 +27,6 @@ enum ReturnItemMapper {
         managed.createdAt = item.createdAt
         managed.returnDate = item.returnDate
         managed.isReturned = item.isReturned
+        managed.isArchived = item.isArchived
     }
 }
