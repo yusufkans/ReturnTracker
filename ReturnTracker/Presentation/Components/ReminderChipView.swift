@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 21.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 struct ReminderChipView: View {
@@ -17,29 +18,35 @@ struct ReminderChipView: View {
     }
 
     var body: some View {
-        Button(action: { isSelected.toggle() }) {
+        Button {
+            withAnimation(AppAnimation.action) {
+                isSelected.toggle()
+            }
+        } label: {
             HStack(spacing: 8) {
                 if isSelected {
                     Image(systemName: "checkmark")
-                        .font(.subheadline.weight(.semibold))
+                        .font(.caption.weight(.bold))
                 }
 
                 Text(title)
-                    .font(.subheadline.weight(.semibold))
+                    .font(.subheadline.weight(.medium))
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 12)
             .padding(.vertical, 10)
-            .foregroundStyle(isSelected ? Color.white : Color.accentColor)
-            .background(
-                Capsule(style: .continuous)
-                    .fill(isSelected ? Color.accentColor : Color.accentColor.opacity(0.12))
-            )
+            .foregroundStyle(isSelected ? .white : .primary)
+            .frame(maxWidth: .infinity)
+            .background(isSelected ? Color.accentColor : Color(.secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
         }
         .buttonStyle(.plain)
     }
 }
 
 #Preview {
-    ReminderChipView(title: "7 days before", isSelected: .constant(true))
-        .padding()
+    ReminderChipView(
+        title: L10n.New.reminderSevenDays,
+        isSelected: .constant(true)
+    )
+    .padding()
 }

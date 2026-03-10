@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 21.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 struct SelectableRow: View {
@@ -42,6 +43,9 @@ struct SelectableRow: View {
 }
 
 #Preview {
-    SelectableRow(title: "Purchase date", value: "Select date") {}
+    SelectableRow(
+        title: L10n.New.purchaseDate,
+        value: L10n.Common.selectDate
+    ) {}
         .padding()
 }

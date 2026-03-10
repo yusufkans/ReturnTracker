@@ -95,24 +95,28 @@ private extension ReturnItemCellViewModel {
         titleText = item.title
         subtitleText = ReturnItemCellViewModel.makeSubtitle(for: item)
         badgeText = ReturnItemCellViewModel.makeBadgeText(for: item)
-        primaryButtonTitle = item.isReturned ? "Returned" : "Mark Returned"
-        secondaryButtonTitle = item.isReturned ? "Unarchive" : "Archive"
+        primaryButtonTitle = item.isReturned
+            ? L10n.Returns.actionReturned
+            : L10n.Returns.actionMarkReturned
+        secondaryButtonTitle = item.isReturned
+            ? L10n.Returns.actionUnarchive
+            : L10n.Returns.actionArchive
         self.item = item
     }
 
     static func makeSubtitle(for item: ReturnItem) -> String {
         guard let returnDate = item.returnDate else {
-            return "Return date: TBD"
+            return L10n.Returns.dateTBD
         }
-        return "Last day: \(dateFormatter.string(from: returnDate))"
+        return L10n.Returns.lastDay(dateFormatter.string(from: returnDate))
     }
 
     static func makeBadgeText(for item: ReturnItem) -> String {
         guard let returnDate = item.returnDate else {
-            return "—"
+            return L10n.Common.dash
         }
         let days = Calendar.current.dateComponents([.day], from: Date(), to: returnDate).day ?? 0
-        return "\(max(days, 0))d"
+        return L10n.Returns.daysBadge(max(days, 0))
     }
 
     static let dateFormatter: DateFormatter = {

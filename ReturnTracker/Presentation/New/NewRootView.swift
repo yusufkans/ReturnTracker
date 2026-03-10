@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import Foundation
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -24,11 +25,11 @@ struct NewRootView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: "Quick Add")
+                    SectionHeaderView(title: L10n.New.quickAdd)
 
                     UploadSelectionCard(
-                        title: "Upload Image/PDF",
-                        subtitle: "We'll suggest the date/store if we can. You can edit anything.",
+                        title: L10n.New.uploadTitle,
+                        subtitle: L10n.New.uploadSubtitleLong,
                         selectedFileName: uploadedFileName
                     ) {
                         isShowingFilePicker = true
@@ -36,28 +37,28 @@ struct NewRootView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: "Manual Add")
+                    SectionHeaderView(title: L10n.New.manualAdd)
 
                     RoundedCardCell {
                         VStack(alignment: .leading, spacing: 16) {
                             LabeledTextFieldRow(
-                                title: "Item name",
-                                placeholder: "e.g., Wireless Headphones",
+                                title: L10n.New.itemName,
+                                placeholder: L10n.New.itemNamePlaceholder,
                                 text: $viewModel.itemName
                             )
 
                             Divider()
 
                             LabeledTextFieldRow(
-                                title: "Store name",
-                                placeholder: "e.g., Apple Store",
+                                title: L10n.New.storeName,
+                                placeholder: L10n.New.storeNamePlaceholder,
                                 text: $viewModel.storeName
                             )
 
                             Divider()
 
                             SelectableRow(
-                                title: "Purchase date",
+                                title: L10n.New.purchaseDate,
                                 value: viewModel.purchaseDateText
                             ) {
                                 draftPurchaseDate = viewModel.selectedPurchaseDate ?? Date()
@@ -69,7 +70,7 @@ struct NewRootView: View {
                             Button(action: {
                                 viewModel.save()
                             }) {
-                                Text("Save Item")
+                                Text(L10n.New.saveItem)
                                     .frame(maxWidth: .infinity)
                             }
                             .buttonStyle(.borderedProminent)
@@ -79,7 +80,8 @@ struct NewRootView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: "Reminders")
+                    SectionHeaderView(title: L10n.New.reminders)
+                    
 
                     LazyVGrid(
                         columns: [GridItem(.adaptive(minimum: 140), spacing: 12)],
@@ -87,15 +89,15 @@ struct NewRootView: View {
                         spacing: 12
                     ) {
                         ReminderChipView(
-                            title: "7 days before",
+                            title: L10n.New.reminderSevenDays,
                             isSelected: $viewModel.reminderSevenDaysBefore
                         )
                         ReminderChipView(
-                            title: "2 days before",
+                            title: L10n.New.reminderTwoDays,
                             isSelected: $viewModel.reminderTwoDaysBefore
                         )
                         ReminderChipView(
-                            title: "On last day",
+                            title: L10n.New.reminderLastDay,
                             isSelected: $viewModel.reminderLastDay
                         )
                     }
@@ -107,10 +109,10 @@ struct NewRootView: View {
             Alert(
                 title: Text(alert.title),
                 message: alert.message.map { Text($0) },
-                dismissButton: .default(Text("OK"))
+                dismissButton: .default(Text(L10n.Common.ok))
             )
         }
-        .navigationTitle("Quick Add")
+        .navigationTitle(L10n.New.quickAdd)
         .fileImporter(
             isPresented: $isShowingFilePicker,
             allowedContentTypes: [.image, .pdf]
@@ -124,7 +126,8 @@ struct NewRootView: View {
         }
         .sheet(isPresented: $isShowingPurchaseDatePicker) {
             DatePickerSheetView(
-                title: "Purchase date",
+                title: L10n.New.purchaseDate,
+
                 selection: $draftPurchaseDate,
                 onSave: {
                     viewModel.selectedPurchaseDate = draftPurchaseDate

@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 20.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 struct RoundedCardCell<Content: View>: View {
@@ -33,9 +34,9 @@ struct RoundedCardCell<Content: View>: View {
 #Preview {
     RoundedCardCell {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Amazon — Running Shoes")
+            Text(L10n.Preview.productTitle)
                 .font(.headline)
-            Text("Last day: Jan 28, 2026")
+            Text(L10n.Preview.productSubtitle)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
         }

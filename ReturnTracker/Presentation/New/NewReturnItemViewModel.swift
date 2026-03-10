@@ -32,7 +32,7 @@ final class NewReturnItemViewModel: ObservableObject {
 
     var purchaseDateText: String {
         guard let selectedPurchaseDate else {
-            return "Select date"
+            return L10n.Common.selectDate
         }
 
         return selectedPurchaseDate.formatted(date: .abbreviated, time: .omitted)
@@ -41,7 +41,10 @@ final class NewReturnItemViewModel: ObservableObject {
     func save() {
         let trimmedItemName = itemName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedItemName.isEmpty else {
-            alert = AlertState(title: "Missing item name", message: "Please add an item name before saving.")
+            alert = AlertState(
+                title: L10n.Alert.missingItemNameTitle,
+                message: L10n.Alert.missingItemNameMessage
+            )
             return
         }
 
@@ -57,9 +60,15 @@ final class NewReturnItemViewModel: ObservableObject {
         do {
             try createUseCase.execute(request: request)
             resetForm()
-            alert = AlertState(title: "Saved", message: "Item has been added to your returns.")
+            alert = AlertState(
+                title: L10n.Alert.savedTitle,
+                message: L10n.Alert.savedNewItemMessage
+            )
         } catch {
-            alert = AlertState(title: "Save failed", message: error.localizedDescription)
+            alert = AlertState(
+                title: L10n.Alert.saveFailedTitle,
+                message: error.localizedDescription
+            )
         }
     }
 

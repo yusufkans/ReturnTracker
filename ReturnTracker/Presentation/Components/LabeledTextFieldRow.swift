@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 21.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 struct LabeledTextFieldRow: View {
@@ -33,8 +34,8 @@ struct LabeledTextFieldRow: View {
 
 #Preview {
     LabeledTextFieldRow(
-        title: "Item name",
-        placeholder: "e.g., Wireless Headphones",
+        title: L10n.New.itemName,
+        placeholder: L10n.New.itemNamePlaceholder,
         text: .constant("")
     )
     .padding()

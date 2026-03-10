@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 20.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 protocol ProductMainCellPresentable {
@@ -79,11 +80,11 @@ struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
 }
 
 private struct PreviewModel: ProductMainCellPresentable {
-    let titleText = "Amazon — Running Shoes"
-    let subtitleText = "Last day: Jan 28, 2026"
-    let badgeText = "9d"
-    let primaryButtonTitle = "Returned"
-    let secondaryButtonTitle = "Archive"
+    let titleText = L10n.Preview.productTitle
+    let subtitleText = L10n.Preview.productSubtitle
+    let badgeText = L10n.Preview.productBadge
+    let primaryButtonTitle = L10n.Returns.actionReturned
+    let secondaryButtonTitle = L10n.Returns.actionArchive
 }
 
 #Preview {

@@ -40,7 +40,7 @@ final class ReturnDetailsViewModel: ObservableObject {
 
     var returnDateText: String {
         guard let returnDate else {
-            return "Select date"
+            return L10n.Common.selectDate
         }
         return returnDate.formatted(date: .abbreviated, time: .omitted)
     }
@@ -50,8 +50,8 @@ final class ReturnDetailsViewModel: ObservableObject {
         let trimmedItemName = itemName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedItemName.isEmpty else {
             alert = ReturnDetailsAlertState(
-                title: "Missing item name",
-                message: "Please add an item name before saving."
+                title: L10n.Alert.missingItemNameTitle,
+                message: L10n.Alert.missingItemNameMessage
             )
             return false
         }
@@ -70,10 +70,16 @@ final class ReturnDetailsViewModel: ObservableObject {
 
         do {
             try repository.save(updatedItem)
-            alert = ReturnDetailsAlertState(title: "Saved", message: "Item updated successfully.")
+            alert = ReturnDetailsAlertState(
+                title: L10n.Alert.savedTitle,
+                message: L10n.Alert.savedUpdatedItemMessage
+            )
             return true
         } catch {
-            alert = ReturnDetailsAlertState(title: "Save failed", message: error.localizedDescription)
+            alert = ReturnDetailsAlertState(
+                title: L10n.Alert.saveFailedTitle,
+                message: error.localizedDescription
+            )
             return false
         }
     }
@@ -90,3 +96,4 @@ final class ReturnDetailsViewModel: ObservableObject {
         return save()
     }
 }
+

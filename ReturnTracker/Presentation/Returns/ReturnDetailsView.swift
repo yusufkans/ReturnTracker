@@ -5,13 +5,14 @@
 //  Created by Yusufkan Sürmelioğlu on 01.02.2026.
 //
 
+import Foundation
 import SwiftUI
 
 struct ReturnDetailsView: View {
     @StateObject private var viewModel: ReturnDetailsViewModel
+    private let onUpdate: () -> Void
     @State private var isShowingReturnDatePicker = false
     @State private var draftReturnDate = Date()
-    private let onUpdate: () -> Void
 
     init(viewModel: ReturnDetailsViewModel, onUpdate: @escaping () -> Void) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -22,46 +23,48 @@ struct ReturnDetailsView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: "Overview")
+                    SectionHeaderView(title: L10n.Details.overview)
 
                     RoundedCardCell {
                         // Overview info row container.
                         VStack(alignment: .leading, spacing: 16) {
-                            InfoRowView(title: "Created", value: viewModel.createdAtText)
+                            InfoRowView(title: L10n.Details.created, value: viewModel.createdAtText)
                             Divider()
                             // Status summary row.
                             InfoRowView(
-                                title: "Status",
-                                value: viewModel.isReturned ? "Returned" : "Active"
+                                title: L10n.Details.status,
+                                value: viewModel.isReturned
+                                    ? L10n.Returns.statusReturned
+                                    : L10n.Returns.statusActive
                             )
                         }
                     }
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: "Details")
+                    SectionHeaderView(title: L10n.Details.sectionTitle)
 
                     RoundedCardCell {
                         // Editable detail fields and save action.
                         VStack(alignment: .leading, spacing: 16) {
                             LabeledTextFieldRow(
-                                title: "Item name",
-                                placeholder: "e.g., Wireless Headphones",
+                                title: L10n.New.itemName,
+                                placeholder: L10n.New.itemNamePlaceholder,
                                 text: $viewModel.itemName
                             )
 
                             Divider()
 
                             LabeledTextFieldRow(
-                                title: "Store name",
-                                placeholder: "e.g., Apple Store",
+                                title: L10n.New.storeName,
+                                placeholder: L10n.New.storeNamePlaceholder,
                                 text: $viewModel.storeName
                             )
 
                             Divider()
 
                             SelectableRow(
-                                title: "Return date",
+                                title: L10n.Details.returnDate,
                                 value: viewModel.returnDateText
                             ) {
                                 draftReturnDate = viewModel.returnDate ?? Date()
@@ -75,7 +78,7 @@ struct ReturnDetailsView: View {
                                     onUpdate()
                                 }
                             }) {
-                                Text("Save Changes")
+                                Text(L10n.Details.saveChanges)
                                     .frame(maxWidth: .infinity)
                             }
                             .buttonStyle(.borderedProminent)
@@ -84,7 +87,7 @@ struct ReturnDetailsView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: "Actions")
+                    SectionHeaderView(title: L10n.Details.actions)
 
                     // Primary and secondary actions stacked for quick access.
                     VStack(spacing: 12) {
@@ -93,7 +96,7 @@ struct ReturnDetailsView: View {
                                 onUpdate()
                             }
                         }) {
-                            Text("Mark Returned")
+                            Text(L10n.Returns.actionMarkReturned)
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
@@ -103,7 +106,7 @@ struct ReturnDetailsView: View {
                                 onUpdate()
                             }
                         }) {
-                            Text("Archive")
+                            Text(L10n.Returns.actionArchive)
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
@@ -117,12 +120,12 @@ struct ReturnDetailsView: View {
             Alert(
                 title: Text(alert.title),
                 message: alert.message.map { Text($0) },
-                dismissButton: .default(Text("OK"))
+                dismissButton: .default(Text(L10n.Common.ok))
             )
         }
         .sheet(isPresented: $isShowingReturnDatePicker) {
             DatePickerSheetView(
-                title: "Return date",
+                title: L10n.Details.returnDate,
                 selection: $draftReturnDate,
                 onSave: {
                     viewModel.returnDate = draftReturnDate
@@ -187,8 +190,8 @@ private final class PreviewReturnItemRepository: ReturnItemRepository {
 
 #Preview {
     let item = ReturnItem(
-        title: "Wireless Headphones",
-        detail: "Apple Store",
+        title: L10n.Preview.itemName,
+        detail: L10n.Preview.storeName,
         createdAt: Date(),
         returnDate: Calendar.current.date(byAdding: .day, value: 4, to: Date()),
         isReturned: false
@@ -197,3 +200,4 @@ private final class PreviewReturnItemRepository: ReturnItemRepository {
     ReturnDetailsView(viewModel: ReturnDetailsViewModel(item: item, repository: repository)) {}
 }
 #endif
+
