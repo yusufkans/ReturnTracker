@@ -83,8 +83,7 @@ struct ReturnsRootView: View {
                     viewModel.load()
                 }
             )
-            .presentationDetents([.large])
-            .presentationDragIndicator(.visible)
+            .adaptiveBottomSheet()
         }
     }
 }
