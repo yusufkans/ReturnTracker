@@ -94,13 +94,19 @@ final class CoreDataStack: CoreDataStoring {
         isReturnedAttribute.attributeType = .booleanAttributeType
         isReturnedAttribute.isOptional = false
 
+        let isArchivedAttribute = NSAttributeDescription()
+        isArchivedAttribute.name = "isArchived"
+        isArchivedAttribute.attributeType = .booleanAttributeType
+        isArchivedAttribute.isOptional = false
+
         entity.properties = [
             idAttribute,
             titleAttribute,
             detailAttribute,
             createdAtAttribute,
             returnDateAttribute,
-            isReturnedAttribute
+            isReturnedAttribute,
+            isArchivedAttribute
         ]
         model.entities = [entity]
         return model

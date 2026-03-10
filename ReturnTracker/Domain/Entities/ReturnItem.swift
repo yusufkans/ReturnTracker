@@ -14,6 +14,7 @@ struct ReturnItem: Identifiable, Equatable {
     var createdAt: Date
     var returnDate: Date?
     var isReturned: Bool
+    var isArchived: Bool
 
     init(
         id: UUID = UUID(),
@@ -21,7 +22,8 @@ struct ReturnItem: Identifiable, Equatable {
         detail: String? = nil,
         createdAt: Date = Date(),
         returnDate: Date? = nil,
-        isReturned: Bool = false
+        isReturned: Bool = false,
+        isArchived: Bool = false
     ) {
         self.id = id
         self.title = title
@@ -29,5 +31,6 @@ struct ReturnItem: Identifiable, Equatable {
         self.createdAt = createdAt
         self.returnDate = returnDate
         self.isReturned = isReturned
+        self.isArchived = isArchived
     }
 }

@@ -16,6 +16,8 @@ struct ReturnItemCellViewModel: Identifiable, ProductMainCellPresentable {
     let badgeText: String
     let primaryButtonTitle: String
     let secondaryButtonTitle: String
+    let isPrimaryButtonEnabled: Bool
+    let isSecondaryButtonEnabled: Bool
     let item: ReturnItem
 }
 
@@ -25,11 +27,17 @@ final class ReturnsRootViewModel: ObservableObject {
     @Published var toast: ToastState?
 
     private let repository: ReturnItemRepository
+    private let statusPolicy: ReturnItemStatusEvaluating
     private let toastScheduler: ToastScheduler
     private var toastTask: Task<Void, Never>?
 
-    init(repository: ReturnItemRepository, toastScheduler: ToastScheduler = DefaultToastScheduler()) {
+    init(
+        repository: ReturnItemRepository,
+        statusPolicy: ReturnItemStatusEvaluating = ReturnItemStatusPolicy(),
+        toastScheduler: ToastScheduler = DefaultToastScheduler()
+    ) {
         self.repository = repository
+        self.statusPolicy = statusPolicy
         self.toastScheduler = toastScheduler
     }
 
@@ -45,26 +53,41 @@ final class ReturnsRootViewModel: ObservableObject {
         let filtered = items.filter { item in
             switch segment {
             case .active:
-                return item.isReturned == false
+                return item.isArchived == false
             case .archive:
-                return item.isReturned
+                return item.isArchived
             }
         }
-        return filtered.map { ReturnItemCellViewModel(from: $0) }
+        return filtered.map { ReturnItemCellViewModel(from: $0, statusPolicy: statusPolicy) }
     }
 
     @discardableResult
     func markReturned(for item: ReturnItem) -> Bool {
-        updateReturnStatus(for: item, isReturned: true)
+        guard statusPolicy.canMarkReturned(item) else {
+            return false
+        }
+        do {
+            try repository.save(statusPolicy.markReturned(item))
+            load()
+            return true
+        } catch {
+            return false
+        }
     }
 
     @discardableResult
     func toggleArchive(for item: ReturnItem) -> Bool {
-        updateReturnStatus(for: item, isReturned: item.isReturned == false)
+        if item.isArchived {
+            guard statusPolicy.canUnarchive(item) else {
+                return false
+            }
+            return update(item: statusPolicy.unarchive(item))
+        }
+        return update(item: statusPolicy.archive(item))
     }
 
     func makeDetailsViewModel(for item: ReturnItem) -> ReturnDetailsViewModel {
-        ReturnDetailsViewModel(item: item, repository: repository)
+        ReturnDetailsViewModel(item: item, repository: repository, statusPolicy: statusPolicy)
     }
 
     func showToast(message: String) {
@@ -76,11 +99,9 @@ final class ReturnsRootViewModel: ObservableObject {
     }
 
     @discardableResult
-    private func updateReturnStatus(for item: ReturnItem, isReturned: Bool) -> Bool {
-        var updatedItem = item
-        updatedItem.isReturned = isReturned
+    private func update(item: ReturnItem) -> Bool {
         do {
-            try repository.save(updatedItem)
+            try repository.save(item)
             load()
             return true
         } catch {
@@ -90,7 +111,7 @@ final class ReturnsRootViewModel: ObservableObject {
 }
 
 private extension ReturnItemCellViewModel {
-    init(from item: ReturnItem) {
+    init(from item: ReturnItem, statusPolicy: ReturnItemStatusEvaluating) {
         id = item.id
         titleText = item.title
         subtitleText = ReturnItemCellViewModel.makeSubtitle(for: item)
@@ -98,9 +119,11 @@ private extension ReturnItemCellViewModel {
         primaryButtonTitle = item.isReturned
             ? L10n.Returns.actionReturned
             : L10n.Returns.actionMarkReturned
-        secondaryButtonTitle = item.isReturned
+        secondaryButtonTitle = item.isArchived
             ? L10n.Returns.actionUnarchive
             : L10n.Returns.actionArchive
+        isPrimaryButtonEnabled = statusPolicy.canMarkReturned(item)
+        isSecondaryButtonEnabled = item.isArchived ? statusPolicy.canUnarchive(item) : true
         self.item = item
     }
 

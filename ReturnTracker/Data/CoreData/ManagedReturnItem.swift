@@ -20,4 +20,5 @@ final class ManagedReturnItem: NSManagedObject {
     @NSManaged var createdAt: Date
     @NSManaged var returnDate: Date?
     @NSManaged var isReturned: Bool
+    @NSManaged var isArchived: Bool
 }
