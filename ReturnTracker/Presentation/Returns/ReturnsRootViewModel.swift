@@ -87,7 +87,7 @@ final class ReturnsRootViewModel: ObservableObject {
     }
 
     func makeDetailsViewModel(for item: ReturnItem) -> ReturnDetailsViewModel {
-        ReturnDetailsViewModel(item: item, repository: repository, statusPolicy: statusPolicy)
+        ReturnDetailsViewModel(item: item, repository: repository)
     }
 
     func showToast(message: String) {
