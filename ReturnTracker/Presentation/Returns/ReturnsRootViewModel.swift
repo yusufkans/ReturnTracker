@@ -95,24 +95,30 @@ private extension ReturnItemCellViewModel {
         titleText = item.title
         subtitleText = ReturnItemCellViewModel.makeSubtitle(for: item)
         badgeText = ReturnItemCellViewModel.makeBadgeText(for: item)
-        primaryButtonTitle = item.isReturned ? "Returned" : "Mark Returned"
-        secondaryButtonTitle = item.isReturned ? "Unarchive" : "Archive"
+        primaryButtonTitle = item.isReturned
+            ? NSLocalizedString("returns.action.returned", comment: "Returned action title")
+            : NSLocalizedString("returns.action.mark_returned", comment: "Mark returned action title")
+        secondaryButtonTitle = item.isReturned
+            ? NSLocalizedString("returns.action.unarchive", comment: "Unarchive action title")
+            : NSLocalizedString("returns.action.archive", comment: "Archive action title")
         self.item = item
     }
 
     static func makeSubtitle(for item: ReturnItem) -> String {
         guard let returnDate = item.returnDate else {
-            return "Return date: TBD"
+            return NSLocalizedString("returns.date.tbd", comment: "Return date unavailable text")
         }
-        return "Last day: \(dateFormatter.string(from: returnDate))"
+        let format = NSLocalizedString("returns.last_day.format", comment: "Last day format with date")
+        return String(format: format, dateFormatter.string(from: returnDate))
     }
 
     static func makeBadgeText(for item: ReturnItem) -> String {
         guard let returnDate = item.returnDate else {
-            return "—"
+            return NSLocalizedString("common.dash", comment: "Placeholder dash")
         }
         let days = Calendar.current.dateComponents([.day], from: Date(), to: returnDate).day ?? 0
-        return "\(max(days, 0))d"
+        let format = NSLocalizedString("returns.badge.days.format", comment: "Days remaining badge format")
+        return String(format: format, max(days, 0))
     }
 
     static let dateFormatter: DateFormatter = {

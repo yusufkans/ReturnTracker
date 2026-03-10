@@ -40,7 +40,7 @@ final class ReturnDetailsViewModel: ObservableObject {
 
     var returnDateText: String {
         guard let returnDate else {
-            return "Select date"
+            return NSLocalizedString("common.select_date", comment: "Date selection placeholder")
         }
         return returnDate.formatted(date: .abbreviated, time: .omitted)
     }
@@ -50,8 +50,8 @@ final class ReturnDetailsViewModel: ObservableObject {
         let trimmedItemName = itemName.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmedItemName.isEmpty else {
             alert = ReturnDetailsAlertState(
-                title: "Missing item name",
-                message: "Please add an item name before saving."
+                title: NSLocalizedString("alert.missing_item_name.title", comment: "Missing item name alert title"),
+                message: NSLocalizedString("alert.missing_item_name.message", comment: "Missing item name alert message")
             )
             return false
         }
@@ -70,10 +70,16 @@ final class ReturnDetailsViewModel: ObservableObject {
 
         do {
             try repository.save(updatedItem)
-            alert = ReturnDetailsAlertState(title: "Saved", message: "Item updated successfully.")
+            alert = ReturnDetailsAlertState(
+                title: NSLocalizedString("alert.saved.title", comment: "Saved alert title"),
+                message: NSLocalizedString("alert.saved.updated_item.message", comment: "Saved alert message for updated item")
+            )
             return true
         } catch {
-            alert = ReturnDetailsAlertState(title: "Save failed", message: error.localizedDescription)
+            alert = ReturnDetailsAlertState(
+                title: NSLocalizedString("alert.save_failed.title", comment: "Save failed alert title"),
+                message: error.localizedDescription
+            )
             return false
         }
     }

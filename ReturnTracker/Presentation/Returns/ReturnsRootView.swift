@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 19.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 enum ReturnsPageSegments: Hashable {
@@ -27,15 +28,15 @@ struct ReturnsRootView: View {
 
     var body: some View {
         ScrollView {
-            Picker("What is your favorite color?", selection: $segment) {
-                Text("Active")
+            Picker(NSLocalizedString("returns.segment.picker", comment: "Returns segment picker accessibility title"), selection: $segment) {
+                Text(NSLocalizedString("returns.segment.active", comment: "Active segment title"))
                     .tag(ReturnsPageSegments.active)
-                Text("Archive")
+                Text(NSLocalizedString("returns.segment.archive", comment: "Archive segment title"))
                     .tag(ReturnsPageSegments.archive)
             }
             .pickerStyle(.segmented)
             .padding()
-            
+
             LazyVStack(spacing: 16) {
                 ForEach(displayedItems) { item in
                     ProductMainCell(
@@ -47,10 +48,12 @@ struct ReturnsRootView: View {
                             withAnimation(AppAnimation.action) {
                                 viewModel.markReturned(for: item.item)
                             }
-                            viewModel.showToast(message: "Marked as returned")
+                            viewModel.showToast(message: NSLocalizedString("toast.marked_as_returned", comment: "Toast for mark returned action"))
                         },
                         onSecondaryTap: {
-                            let message = item.item.isReturned ? "Unarchived" : "Archived"
+                            let message = item.item.isReturned
+                                ? NSLocalizedString("toast.unarchived", comment: "Toast for unarchive action")
+                                : NSLocalizedString("toast.archived", comment: "Toast for archive action")
                             withAnimation(AppAnimation.action) {
                                 viewModel.toggleArchive(for: item.item)
                             }
@@ -62,7 +65,7 @@ struct ReturnsRootView: View {
             }
             .padding()
         }
-        .navigationTitle("Returns")
+        .navigationTitle(NSLocalizedString("returns.title", comment: "Returns screen title"))
         .navigationBarTitleDisplayMode(.automatic)
         .backgroundStyle(Color(.systemGroupedBackground))
         .overlay(alignment: .bottom) {

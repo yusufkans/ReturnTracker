@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 19.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 struct SettingsRootView: View {
@@ -13,11 +14,11 @@ struct SettingsRootView: View {
             Image(systemName: "gearshape.fill")
                 .imageScale(.large)
                 .foregroundStyle(.tint)
-            Text("Settings")
+            Text(NSLocalizedString("settings.title", comment: "Settings screen title"))
                 .font(.headline)
         }
         .padding()
-        .navigationTitle("Settings")
+        .navigationTitle(NSLocalizedString("settings.title", comment: "Settings navigation title"))
     }
 }
 

@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 21.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 struct UploadSelectionCard: View {
@@ -52,8 +53,8 @@ struct UploadSelectionCard: View {
 
 #Preview {
     UploadSelectionCard(
-        title: "Upload Image/PDF",
-        subtitle: "We'll suggest the date/store if we can."
+        title: NSLocalizedString("new.upload.title", comment: "Upload card title"),
+        subtitle: NSLocalizedString("new.upload.subtitle.short", comment: "Upload card subtitle")
     ) {}
     .padding()
 }

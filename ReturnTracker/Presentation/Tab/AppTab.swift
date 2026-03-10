@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 19.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 enum AppTab: String, CaseIterable, Identifiable {
@@ -17,11 +18,11 @@ enum AppTab: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .products:
-            return "Returns"
+            return NSLocalizedString("tab.returns", comment: "Returns tab title")
         case .new:
-            return "New"
+            return NSLocalizedString("tab.new", comment: "New tab title")
         case .settings:
-            return "Settings"
+            return NSLocalizedString("tab.settings", comment: "Settings tab title")
         }
     }
 

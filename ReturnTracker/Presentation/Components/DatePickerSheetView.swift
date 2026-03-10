@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 21.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 struct DatePickerSheetView: View {
@@ -41,11 +42,11 @@ struct DatePickerSheetView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel", action: onCancel)
+                    Button(NSLocalizedString("common.cancel", comment: "Cancel button title"), action: onCancel)
                 }
 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save", action: onSave)
+                    Button(NSLocalizedString("common.save", comment: "Save button title"), action: onSave)
                 }
             }
         }
@@ -54,7 +55,7 @@ struct DatePickerSheetView: View {
 
 #Preview {
     DatePickerSheetView(
-        title: "Purchase date",
+        title: NSLocalizedString("new.purchase_date", comment: "Purchase date picker title"),
         selection: .constant(Date()),
         onSave: {},
         onCancel: {}

@@ -1,0 +1,65 @@
+"tab.returns" = "İadeler";
+"tab.new" = "Yeni";
+"tab.settings" = "Ayarlar";
+"settings.title" = "Ayarlar";
+
+"common.ok" = "Tamam";
+"common.cancel" = "İptal";
+"common.save" = "Kaydet";
+"common.select_date" = "Tarih seç";
+"common.dash" = "—";
+
+"new.quick_add" = "Hızlı Ekle";
+"new.manual_add" = "Manuel Ekle";
+"new.reminders" = "Hatırlatıcılar";
+"new.item_name" = "Ürün adı";
+"new.item_name.placeholder" = "örn. Kablosuz Kulaklık";
+"new.store_name" = "Mağaza adı";
+"new.store_name.placeholder" = "örn. Apple Store";
+"new.purchase_date" = "Satın alma tarihi";
+"new.action.save_item" = "Ürünü Kaydet";
+"new.upload.title" = "Görsel/PDF Yükle";
+"new.upload.subtitle.short" = "Mümkünse tarih/mağaza öneririz.";
+"new.upload.subtitle.long" = "Mümkünse tarih/mağaza öneririz. Tüm alanları düzenleyebilirsin.";
+"new.reminder.seven_days" = "7 gün önce";
+"new.reminder.two_days" = "2 gün önce";
+"new.reminder.last_day" = "Son gün";
+
+"alert.missing_item_name.title" = "Ürün adı eksik";
+"alert.missing_item_name.message" = "Kaydetmeden önce bir ürün adı gir.";
+"alert.saved.title" = "Kaydedildi";
+"alert.saved.new_item.message" = "Ürün iadelere eklendi.";
+"alert.saved.updated_item.message" = "Ürün başarıyla güncellendi.";
+"alert.save_failed.title" = "Kaydetme başarısız";
+
+"returns.title" = "İadeler";
+"returns.segment.picker" = "İade Segmenti";
+"returns.segment.active" = "Aktif";
+"returns.segment.archive" = "Arşiv";
+"returns.action.returned" = "İade Edildi";
+"returns.action.mark_returned" = "İade Edildi Olarak İşaretle";
+"returns.action.archive" = "Arşivle";
+"returns.action.unarchive" = "Arşivden Çıkar";
+"returns.status.returned" = "İade Edildi";
+"returns.status.active" = "Aktif";
+"returns.date.tbd" = "İade tarihi: Belirsiz";
+"returns.last_day.format" = "Son gün: %@";
+"returns.badge.days.format" = "%dg";
+
+"toast.marked_as_returned" = "İade edildi olarak işaretlendi";
+"toast.archived" = "Arşivlendi";
+"toast.unarchived" = "Arşivden çıkarıldı";
+
+"details.overview" = "Genel Bakış";
+"details.created" = "Oluşturulma";
+"details.status" = "Durum";
+"details.section.title" = "Detaylar";
+"details.return_date" = "İade tarihi";
+"details.action.save_changes" = "Değişiklikleri Kaydet";
+"details.actions" = "Aksiyonlar";
+
+"preview.product_title" = "Amazon — Koşu Ayakkabısı";
+"preview.product_subtitle" = "Son gün: 28 Oca 2026";
+"preview.product_badge" = "9g";
+"preview.item_name" = "Kablosuz Kulaklık";
+"preview.store_name" = "Apple Store";

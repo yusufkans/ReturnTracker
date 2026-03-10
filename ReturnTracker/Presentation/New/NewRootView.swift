@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import Foundation
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -24,11 +25,11 @@ struct NewRootView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: "Quick Add")
+                    SectionHeaderView(title: NSLocalizedString("new.quick_add", comment: "Quick add section header"))
 
                     UploadSelectionCard(
-                        title: "Upload Image/PDF",
-                        subtitle: "We'll suggest the date/store if we can. You can edit anything.",
+                        title: NSLocalizedString("new.upload.title", comment: "Upload card title"),
+                        subtitle: NSLocalizedString("new.upload.subtitle.long", comment: "Upload card subtitle"),
                         selectedFileName: uploadedFileName
                     ) {
                         isShowingFilePicker = true
@@ -36,28 +37,28 @@ struct NewRootView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: "Manual Add")
+                    SectionHeaderView(title: NSLocalizedString("new.manual_add", comment: "Manual add section header"))
 
                     RoundedCardCell {
                         VStack(alignment: .leading, spacing: 16) {
                             LabeledTextFieldRow(
-                                title: "Item name",
-                                placeholder: "e.g., Wireless Headphones",
+                                title: NSLocalizedString("new.item_name", comment: "Item name field label"),
+                                placeholder: NSLocalizedString("new.item_name.placeholder", comment: "Item name placeholder"),
                                 text: $viewModel.itemName
                             )
 
                             Divider()
 
                             LabeledTextFieldRow(
-                                title: "Store name",
-                                placeholder: "e.g., Apple Store",
+                                title: NSLocalizedString("new.store_name", comment: "Store name field label"),
+                                placeholder: NSLocalizedString("new.store_name.placeholder", comment: "Store name placeholder"),
                                 text: $viewModel.storeName
                             )
 
                             Divider()
 
                             SelectableRow(
-                                title: "Purchase date",
+                                title: NSLocalizedString("new.purchase_date", comment: "Purchase date field label"),
                                 value: viewModel.purchaseDateText
                             ) {
                                 draftPurchaseDate = viewModel.selectedPurchaseDate ?? Date()
@@ -69,7 +70,7 @@ struct NewRootView: View {
                             Button(action: {
                                 viewModel.save()
                             }) {
-                                Text("Save Item")
+                                Text(NSLocalizedString("new.action.save_item", comment: "Save item button title"))
                                     .frame(maxWidth: .infinity)
                             }
                             .buttonStyle(.borderedProminent)
@@ -79,7 +80,7 @@ struct NewRootView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 12) {
-                    SectionHeaderView(title: "Reminders")
+                    SectionHeaderView(title: NSLocalizedString("new.reminders", comment: "Reminders section header"))
 
                     LazyVGrid(
                         columns: [GridItem(.adaptive(minimum: 140), spacing: 12)],
@@ -87,15 +88,15 @@ struct NewRootView: View {
                         spacing: 12
                     ) {
                         ReminderChipView(
-                            title: "7 days before",
+                            title: NSLocalizedString("new.reminder.seven_days", comment: "Reminder option title"),
                             isSelected: $viewModel.reminderSevenDaysBefore
                         )
                         ReminderChipView(
-                            title: "2 days before",
+                            title: NSLocalizedString("new.reminder.two_days", comment: "Reminder option title"),
                             isSelected: $viewModel.reminderTwoDaysBefore
                         )
                         ReminderChipView(
-                            title: "On last day",
+                            title: NSLocalizedString("new.reminder.last_day", comment: "Reminder option title"),
                             isSelected: $viewModel.reminderLastDay
                         )
                     }
@@ -107,10 +108,10 @@ struct NewRootView: View {
             Alert(
                 title: Text(alert.title),
                 message: alert.message.map { Text($0) },
-                dismissButton: .default(Text("OK"))
+                dismissButton: .default(Text(NSLocalizedString("common.ok", comment: "OK button title")))
             )
         }
-        .navigationTitle("Quick Add")
+        .navigationTitle(NSLocalizedString("new.quick_add", comment: "Quick add screen title"))
         .fileImporter(
             isPresented: $isShowingFilePicker,
             allowedContentTypes: [.image, .pdf]
@@ -124,7 +125,7 @@ struct NewRootView: View {
         }
         .sheet(isPresented: $isShowingPurchaseDatePicker) {
             DatePickerSheetView(
-                title: "Purchase date",
+                title: NSLocalizedString("new.purchase_date", comment: "Purchase date picker title"),
                 selection: $draftPurchaseDate,
                 onSave: {
                     viewModel.selectedPurchaseDate = draftPurchaseDate

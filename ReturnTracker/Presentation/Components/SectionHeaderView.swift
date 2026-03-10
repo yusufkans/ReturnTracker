@@ -5,6 +5,7 @@
 //  Created by Yusufkan Sürmelioğlu on 21.01.2026.
 //
 
+import Foundation
 import SwiftUI
 
 struct SectionHeaderView: View {
@@ -24,6 +25,6 @@ struct SectionHeaderView: View {
 }
 
 #Preview {
-    SectionHeaderView(title: "Manual Add")
+    SectionHeaderView(title: NSLocalizedString("new.manual_add", comment: "Manual add section title"))
         .padding()
 }
