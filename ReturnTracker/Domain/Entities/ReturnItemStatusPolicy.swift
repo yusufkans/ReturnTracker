@@ -16,6 +16,20 @@ protocol ReturnItemStatusEvaluating {
     func unarchive(_ item: ReturnItem) -> ReturnItem
 }
 
+extension ReturnItemStatusEvaluating {
+    func isReturnWindowExpired(for item: ReturnItem) -> Bool {
+        isReturnWindowExpired(for: item, now: Date())
+    }
+
+    func canMarkReturned(_ item: ReturnItem) -> Bool {
+        canMarkReturned(item, now: Date())
+    }
+
+    func canUnarchive(_ item: ReturnItem) -> Bool {
+        canUnarchive(item, now: Date())
+    }
+}
+
 struct ReturnItemStatusPolicy: ReturnItemStatusEvaluating {
     private let calendar: Calendar
 
