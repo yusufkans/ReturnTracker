@@ -30,6 +30,8 @@ final class CoreDataStack: CoreDataStoring {
         } else {
             description.url = storeURL ?? Self.defaultStoreURL()
         }
+        description.shouldMigrateStoreAutomatically = true
+        description.shouldInferMappingModelAutomatically = true
         container.persistentStoreDescriptions = [description]
 
         var loadError: Error?
@@ -42,6 +44,8 @@ final class CoreDataStack: CoreDataStoring {
 
         container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         container.viewContext.automaticallyMergesChangesFromParent = true
+
+        try Self.backfillArchivedStateIfNeeded(context: container.viewContext)
 
         self.persistentContainer = container
         self.mainContext = container.viewContext
@@ -94,13 +98,20 @@ final class CoreDataStack: CoreDataStoring {
         isReturnedAttribute.attributeType = .booleanAttributeType
         isReturnedAttribute.isOptional = false
 
+        let isArchivedAttribute = NSAttributeDescription()
+        isArchivedAttribute.name = "isArchived"
+        isArchivedAttribute.attributeType = .booleanAttributeType
+        isArchivedAttribute.isOptional = false
+        isArchivedAttribute.defaultValue = false
+
         entity.properties = [
             idAttribute,
             titleAttribute,
             detailAttribute,
             createdAtAttribute,
             returnDateAttribute,
-            isReturnedAttribute
+            isReturnedAttribute,
+            isArchivedAttribute
         ]
         model.entities = [entity]
         return model
@@ -114,5 +125,25 @@ final class CoreDataStack: CoreDataStoring {
             try? fileManager.createDirectory(at: appURL, withIntermediateDirectories: true)
         }
         return appURL.appendingPathComponent("ReturnTracker.sqlite")
+    }
+
+    private static func backfillArchivedStateIfNeeded(context: NSManagedObjectContext) throws {
+        try context.performAndWait {
+            let request = ManagedReturnItem.fetchRequest()
+            request.predicate = NSPredicate(format: "isReturned == YES AND isArchived == NO")
+
+            let legacyReturnedItems = try context.fetch(request)
+            guard legacyReturnedItems.isEmpty == false else {
+                return
+            }
+
+            for item in legacyReturnedItems {
+                item.isArchived = true
+            }
+
+            if context.hasChanges {
+                try context.save()
+            }
+        }
     }
 }

@@ -45,17 +45,25 @@ struct ReturnsRootView: View {
                             selectedItem = item.item
                         },
                         onPrimaryTap: {
+                            var didMarkReturned = false
                             withAnimation(AppAnimation.action) {
-                                viewModel.markReturned(for: item.item)
+                                didMarkReturned = viewModel.markReturned(for: item.item)
+                            }
+                            guard didMarkReturned else {
+                                return
                             }
                             viewModel.showToast(message: L10n.Toast.markedAsReturned)
                         },
                         onSecondaryTap: {
-                            let message = item.item.isReturned
+                            let message = item.item.isArchived
                                 ? L10n.Toast.unarchived
                                 : L10n.Toast.archived
+                            var didToggleArchive = false
                             withAnimation(AppAnimation.action) {
-                                viewModel.toggleArchive(for: item.item)
+                                didToggleArchive = viewModel.toggleArchive(for: item.item)
+                            }
+                            guard didToggleArchive else {
+                                return
                             }
                             viewModel.showToast(message: message)
                         }

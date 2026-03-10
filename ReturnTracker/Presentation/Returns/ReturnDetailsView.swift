@@ -33,8 +33,8 @@ struct ReturnDetailsView: View {
                             // Status summary row.
                             InfoRowView(
                                 title: L10n.Details.status,
-                                value: viewModel.isReturned
-                                    ? L10n.Returns.statusReturned
+                                value: viewModel.isArchived
+                                    ? L10n.Returns.segmentArchive
                                     : L10n.Returns.statusActive
                             )
                         }
@@ -100,6 +100,7 @@ struct ReturnDetailsView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.borderedProminent)
+                        .disabled(viewModel.canMarkReturned == false)
 
                         Button(action: {
                             if viewModel.archive() {
@@ -110,6 +111,7 @@ struct ReturnDetailsView: View {
                                 .frame(maxWidth: .infinity)
                         }
                         .buttonStyle(.bordered)
+                        .disabled(viewModel.canArchive == false)
                     }
                 }
             }
@@ -172,7 +174,7 @@ private final class PreviewReturnItemRepository: ReturnItemRepository {
     }
 
     func fetchActive() throws -> [ReturnItem] {
-        items.filter { $0.isReturned == false }
+        items.filter { $0.isArchived == false }
     }
 
     func save(_ item: ReturnItem) throws {
@@ -194,10 +196,10 @@ private final class PreviewReturnItemRepository: ReturnItemRepository {
         detail: L10n.Preview.storeName,
         createdAt: Date(),
         returnDate: Calendar.current.date(byAdding: .day, value: 4, to: Date()),
-        isReturned: false
+        isReturned: false,
+        isArchived: false
     )
     let repository = PreviewReturnItemRepository(items: [item])
     ReturnDetailsView(viewModel: ReturnDetailsViewModel(item: item, repository: repository)) {}
 }
 #endif
-

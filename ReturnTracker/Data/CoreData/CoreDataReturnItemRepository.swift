@@ -30,7 +30,7 @@ final class CoreDataReturnItemRepository: ReturnItemRepository {
         let context = store.mainContext
         return try performAndWait(context) {
             let request = ManagedReturnItem.fetchRequest()
-            request.predicate = NSPredicate(format: "isReturned == NO")
+            request.predicate = NSPredicate(format: "isArchived == NO")
             request.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
             let managedItems = try context.fetch(request)
             return managedItems.map(ReturnItemMapper.mapToDomain)
