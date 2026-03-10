@@ -111,6 +111,7 @@ struct ReturnDetailsView: View {
                 }
             }
             .padding()
+            .adaptiveBottomSheetContentHeightSource()
         }
         .alert(item: $viewModel.alert) { alert in
             Alert(

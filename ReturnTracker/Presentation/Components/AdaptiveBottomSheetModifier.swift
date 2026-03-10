@@ -7,11 +7,25 @@
 
 import SwiftUI
 
-private struct BottomSheetContentHeightKey: PreferenceKey {
+private struct AdaptiveBottomSheetContentHeightKey: PreferenceKey {
     static var defaultValue: CGFloat = 0
 
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = max(value, nextValue())
+    }
+}
+
+private struct AdaptiveBottomSheetIntrinsicHeightReader: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .background(
+                GeometryReader { proxy in
+                    Color.clear.preference(
+                        key: AdaptiveBottomSheetContentHeightKey.self,
+                        value: proxy.size.height
+                    )
+                }
+            )
     }
 }
 
@@ -33,23 +47,12 @@ private struct AdaptiveBottomSheetModifier: ViewModifier {
     }
 
     func body(content: Content) -> some View {
-        let resolvedHeight = resolvedDetentHeight
-
         content
-            .background(
-                GeometryReader { proxy in
-                    Color.clear
-                        .preference(
-                            key: BottomSheetContentHeightKey.self,
-                            value: proxy.size.height
-                        )
-                }
-            )
-            .onPreferenceChange(BottomSheetContentHeightKey.self) { newHeight in
+            .onPreferenceChange(AdaptiveBottomSheetContentHeightKey.self) { newHeight in
                 guard abs(newHeight - measuredHeight) > 1 else { return }
                 measuredHeight = newHeight
             }
-            .presentationDetents([.height(resolvedHeight)])
+            .presentationDetents([.height(resolvedDetentHeight)])
             .presentationDragIndicator(.visible)
     }
 
@@ -64,7 +67,13 @@ private struct AdaptiveBottomSheetModifier: ViewModifier {
 }
 
 extension View {
-    /// Makes sheet presentation height track the content size in a reusable way.
+    /// Reports the intrinsic height of a sheet content container (e.g. the VStack inside a ScrollView).
+    func adaptiveBottomSheetContentHeightSource() -> some View {
+        modifier(AdaptiveBottomSheetIntrinsicHeightReader())
+    }
+
+    /// Makes sheet presentation height track measured intrinsic content size.
+    /// Apply `adaptiveBottomSheetContentHeightSource()` to an inner non-scrolling container.
     func adaptiveBottomSheet(
         minHeight: CGFloat = 220,
         maxHeightRatio: CGFloat = 0.9,
