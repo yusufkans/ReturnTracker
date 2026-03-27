@@ -17,25 +17,41 @@ struct ReturnsRootView: View {
     @State var segment: ReturnsPageSegments = .active
     @StateObject private var viewModel: ReturnsRootViewModel
     @State private var selectedItem: ReturnItem?
+    @State private var searchText: String = ""
 
     init(viewModel: ReturnsRootViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
     private var displayedItems: [ReturnItemCellViewModel] {
-        viewModel.items(for: segment)
+        viewModel.items(for: segment, matching: searchText)
+    }
+
+    private var searchBar: some View {
+        SearchTextField(
+            placeholder: L10n.Returns.searchPlaceholder,
+            text: $searchText,
+            leadingAccessory: {
+                Image(systemName: "magnifyingglass")
+                    .font(.subheadline)
+            }
+        )
     }
 
     var body: some View {
         ScrollView {
-            Picker(L10n.Returns.segmentPicker, selection: $segment) {
-                Text(L10n.Returns.segmentActive)
-                    .tag(ReturnsPageSegments.active)
-                Text(L10n.Returns.segmentArchive)
-                    .tag(ReturnsPageSegments.archive)
+            VStack(spacing: 12) {
+                searchBar
+
+                Picker(L10n.Returns.segmentPicker, selection: $segment) {
+                    Text(L10n.Returns.segmentActive)
+                        .tag(ReturnsPageSegments.active)
+                    Text(L10n.Returns.segmentArchive)
+                        .tag(ReturnsPageSegments.archive)
+                }
+                .pickerStyle(.segmented)
             }
-            .pickerStyle(.segmented)
-            .padding()
+            .padding([.top, .horizontal])
 
             LazyVStack(spacing: 16) {
                 ForEach(displayedItems) { item in

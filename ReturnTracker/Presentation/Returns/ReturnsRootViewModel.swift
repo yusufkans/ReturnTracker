@@ -41,14 +41,25 @@ final class ReturnsRootViewModel: ObservableObject {
         }
     }
 
-    func items(for segment: ReturnsPageSegments) -> [ReturnItemCellViewModel] {
+    func items(for segment: ReturnsPageSegments, matching query: String = "") -> [ReturnItemCellViewModel] {
+        let normalizedQuery = query.normalizedForSearch
         let filtered = items.filter { item in
+            let matchesSegment: Bool
             switch segment {
             case .active:
-                return item.isReturned == false
+                matchesSegment = item.isReturned == false
             case .archive:
-                return item.isReturned
+                matchesSegment = item.isReturned
             }
+
+            guard matchesSegment else {
+                return false
+            }
+            guard normalizedQuery.isEmpty == false else {
+                return true
+            }
+
+            return item.matchesSearchQuery(normalizedQuery)
         }
         return filtered.map { ReturnItemCellViewModel(from: $0) }
     }
@@ -86,6 +97,20 @@ final class ReturnsRootViewModel: ObservableObject {
         } catch {
             return false
         }
+    }
+}
+
+private extension ReturnItem {
+    func matchesSearchQuery(_ normalizedQuery: String) -> Bool {
+        title.normalizedForSearch.contains(normalizedQuery)
+            || (detail?.normalizedForSearch.contains(normalizedQuery) ?? false)
+    }
+}
+
+private extension String {
+    var normalizedForSearch: String {
+        trimmingCharacters(in: .whitespacesAndNewlines)
+            .folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current)
     }
 }
 
