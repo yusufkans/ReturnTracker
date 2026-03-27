@@ -39,6 +39,11 @@ enum ReturnsSortOption: String, CaseIterable, Identifiable {
     }
 }
 
+enum ReturnItemStatusSegment: Hashable {
+    case active
+    case returned
+}
+
 @MainActor
 final class ReturnsRootViewModel: ObservableObject {
     @Published private(set) var items: [ReturnItem] = []
@@ -62,7 +67,7 @@ final class ReturnsRootViewModel: ObservableObject {
     }
 
     func items(
-        for segment: ReturnsPageSegments,
+        for segment: ReturnItemStatusSegment,
         matching query: String = "",
         sortedBy sortOption: ReturnsSortOption = .returnDateNearest
     ) -> [ReturnItemCellViewModel] {
@@ -72,7 +77,7 @@ final class ReturnsRootViewModel: ObservableObject {
             switch segment {
             case .active:
                 matchesSegment = item.isReturned == false
-            case .archive:
+            case .returned:
                 matchesSegment = item.isReturned
             }
 
