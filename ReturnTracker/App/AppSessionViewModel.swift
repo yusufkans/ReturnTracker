@@ -5,6 +5,7 @@
 //  Created by Codex on 27.03.2026.
 //
 
+import Combine
 import Foundation
 
 @MainActor
