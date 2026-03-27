@@ -86,14 +86,10 @@ final class ReturnDetailsViewModel: ObservableObject {
 
     @discardableResult
     func markReturned() -> Bool {
-        isReturned = true
-        return save()
-    }
-
-    @discardableResult
-    func archive() -> Bool {
+        guard isReturned == false else {
+            return save()
+        }
         isReturned = true
         return save()
     }
 }
-

@@ -801,23 +801,6 @@
         }
       }
     },
-    "returns.segment.archive": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Archive"
-          }
-        },
-        "tr": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Arşiv"
-          }
-        }
-      }
-    },
     "returns.segment.picker": {
       "extractionState": "manual",
       "localizations": {
@@ -1086,6 +1069,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "İlk eklenen"
+          }
+        }
+      }
+    },
+    "returns.segment.returned": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Returned"
+          }
+        },
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İade Edildi"
           }
         }
       }

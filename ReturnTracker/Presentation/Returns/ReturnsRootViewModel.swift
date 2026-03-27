@@ -15,7 +15,7 @@ struct ReturnItemCellViewModel: Identifiable, ProductMainCellPresentable {
     let subtitleText: String
     let badgeText: String
     let primaryButtonTitle: String
-    let secondaryButtonTitle: String
+    let secondaryButtonTitle: String?
     let item: ReturnItem
 }
 
@@ -41,6 +41,11 @@ enum ReturnsSortOption: String, CaseIterable, Identifiable {
     }
 }
 
+enum ReturnItemStatusSegment: Hashable {
+    case active
+    case returned
+}
+
 @MainActor
 final class ReturnsRootViewModel: ObservableObject {
     @Published private(set) var items: [ReturnItem] = []
@@ -64,7 +69,7 @@ final class ReturnsRootViewModel: ObservableObject {
     }
 
     func items(
-        for segment: ReturnsPageSegments,
+        for segment: ReturnItemStatusSegment,
         matching query: String = "",
         sortedBy sortOption: ReturnsSortOption = .returnDateNearest
     ) -> [ReturnItemCellViewModel] {
@@ -74,7 +79,7 @@ final class ReturnsRootViewModel: ObservableObject {
             switch segment {
             case .active:
                 matchesSegment = item.isReturned == false
-            case .archive:
+            case .returned:
                 matchesSegment = item.isReturned
             }
 
@@ -97,11 +102,6 @@ final class ReturnsRootViewModel: ObservableObject {
     @discardableResult
     func markReturned(for item: ReturnItem) -> Bool {
         updateReturnStatus(for: item, isReturned: true)
-    }
-
-    @discardableResult
-    func toggleArchive(for item: ReturnItem) -> Bool {
-        updateReturnStatus(for: item, isReturned: item.isReturned == false)
     }
 
     func makeDetailsViewModel(for item: ReturnItem) -> ReturnDetailsViewModel {
@@ -181,9 +181,7 @@ private extension ReturnItemCellViewModel {
         primaryButtonTitle = item.isReturned
             ? L10n.Returns.actionReturned
             : L10n.Returns.actionMarkReturned
-        secondaryButtonTitle = item.isReturned
-            ? L10n.Returns.actionUnarchive
-            : L10n.Returns.actionArchive
+        secondaryButtonTitle = nil
         self.item = item
     }
 

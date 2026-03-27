@@ -8,13 +8,8 @@
 import Foundation
 import SwiftUI
 
-enum ReturnsPageSegments: Hashable {
-    case active
-    case archive
-}
-
 struct ReturnsRootView: View {
-    @State var segment: ReturnsPageSegments = .active
+    @State private var segment: ReturnItemStatusSegment = .active
     @StateObject private var viewModel: ReturnsRootViewModel
     @State private var selectedItem: ReturnItem?
     @State private var searchText: String = ""
@@ -67,9 +62,9 @@ struct ReturnsRootView: View {
 
                 Picker(L10n.Returns.segmentPicker, selection: $segment) {
                     Text(L10n.Returns.segmentActive)
-                        .tag(ReturnsPageSegments.active)
-                    Text(L10n.Returns.segmentArchive)
-                        .tag(ReturnsPageSegments.archive)
+                        .tag(ReturnItemStatusSegment.active)
+                    Text(L10n.Returns.segmentReturned)
+                        .tag(ReturnItemStatusSegment.returned)
                 }
                 .pickerStyle(.segmented)
             }
@@ -83,19 +78,12 @@ struct ReturnsRootView: View {
                             selectedItem = item.item
                         },
                         onPrimaryTap: {
-                            withAnimation(AppAnimation.action) {
+                            let isMarked = withAnimation(AppAnimation.action) {
                                 viewModel.markReturned(for: item.item)
                             }
-                            viewModel.showToast(message: L10n.Toast.markedAsReturned)
-                        },
-                        onSecondaryTap: {
-                            let message = item.item.isReturned
-                                ? L10n.Toast.unarchived
-                                : L10n.Toast.archived
-                            withAnimation(AppAnimation.action) {
-                                viewModel.toggleArchive(for: item.item)
+                            if isMarked {
+                                viewModel.showToast(message: L10n.Toast.markedAsReturned)
                             }
-                            viewModel.showToast(message: message)
                         }
                     )
                     .transition(AppAnimation.listItemTransition)
