@@ -31,12 +31,7 @@ struct RoundedCardCell<Content: View>: View {
             self.onTrigger = onTrigger
         }
     }
-
-    private enum SwipeMetrics {
-        static let maxOffset: CGFloat = 220
-        static let triggerOffset: CGFloat = 165
-    }
-
+    
     private let content: Content
     private let swipeAction: SwipeActionConfiguration?
     @State private var horizontalOffset: CGFloat = 0
@@ -137,6 +132,11 @@ struct RoundedCardCell<Content: View>: View {
         let overshoot = clamped - SwipeMetrics.maxOffset
         return SwipeMetrics.maxOffset + (overshoot * 0.2)
     }
+}
+
+private enum SwipeMetrics {
+    static let maxOffset: CGFloat = 220
+    static let triggerOffset: CGFloat = 165
 }
 
 private extension View {
