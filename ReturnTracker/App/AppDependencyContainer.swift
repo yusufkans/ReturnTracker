@@ -11,6 +11,8 @@ final class AppDependencyContainer {
     let coreDataStack: CoreDataStoring
     let returnItemRepository: ReturnItemRepository
     let createReturnItemUseCase: CreateReturnItemUseCase
+    let authenticationRepository: AuthenticationRepository
+    let signInUseCase: SignInUseCase
 
     init() {
         do {
@@ -19,6 +21,9 @@ final class AppDependencyContainer {
             let repository = CoreDataReturnItemRepository(store: stack)
             returnItemRepository = repository
             createReturnItemUseCase = DefaultCreateReturnItemUseCase(repository: repository)
+            let authenticationRepository = MockAuthenticationRepository()
+            self.authenticationRepository = authenticationRepository
+            signInUseCase = DefaultSignInUseCase(repository: authenticationRepository)
         } catch {
             fatalError("Failed to initialize Core Data stack: \(error)")
         }
