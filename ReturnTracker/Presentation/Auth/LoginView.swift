@@ -32,9 +32,9 @@ struct LoginView: View {
     private var backgroundGradient: some View {
         LinearGradient(
             colors: [
-                Color(.sRGB, red: 0.11, green: 0.15, blue: 0.28, opacity: 1),
-                Color(.sRGB, red: 0.16, green: 0.32, blue: 0.61, opacity: 1),
-                Color(.sRGB, red: 0.89, green: 0.93, blue: 1.0, opacity: 1)
+                Color("AuthBackgroundStart"),
+                Color("AuthBackgroundMiddle"),
+                Color("AuthBackgroundEnd")
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -42,7 +42,7 @@ struct LoginView: View {
         .ignoresSafeArea()
         .overlay(alignment: .topTrailing) {
             Circle()
-                .fill(.white.opacity(0.2))
+                .fill(Color("AuthGlow"))
                 .blur(radius: 35)
                 .frame(width: 220, height: 220)
                 .offset(x: 80, y: -40)
@@ -56,7 +56,7 @@ struct LoginView: View {
                 .foregroundStyle(.white)
             Text(L10n.Auth.welcomeMessage)
                 .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.86))
+                .foregroundStyle(Color("AuthSubtitleText"))
                 .multilineTextAlignment(.leading)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -108,7 +108,7 @@ struct LoginView: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 54)
                 .foregroundStyle(.white)
-                .background(Color.black.opacity(0.82), in: Capsule())
+                .background(Color("AuthPrimaryButton"), in: Capsule())
             }
             .disabled(!viewModel.canSubmit)
             .opacity(viewModel.canSubmit ? 1 : 0.65)
@@ -116,12 +116,12 @@ struct LoginView: View {
         .padding(22)
         .background(
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(.white.opacity(0.78))
+                .fill(Color("AuthCardFill"))
                 .overlay {
                     RoundedRectangle(cornerRadius: 28, style: .continuous)
-                        .stroke(.white.opacity(0.46), lineWidth: 1)
+                        .stroke(Color("AuthCardStroke"), lineWidth: 1)
                 }
-                .shadow(color: .black.opacity(0.15), radius: 18, y: 8)
+                .shadow(color: Color("AuthCardShadow"), radius: 18, y: 8)
         )
     }
 
@@ -135,7 +135,7 @@ struct LoginView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
                 .font(.footnote.weight(.semibold))
-                .foregroundStyle(.black.opacity(0.7))
+                .foregroundStyle(Color("AuthFieldLabel"))
 
             HStack(spacing: 10) {
                 Image(systemName: systemImage)
@@ -151,7 +151,7 @@ struct LoginView: View {
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 14)
-            .background(Color.white.opacity(0.92), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .background(Color("AuthFieldFill"), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         }
     }
 }
