@@ -70,6 +70,11 @@ enum L10n {
         static var statusReturned: String { L10n.text("returns.status.returned", "Returned status") }
         static var statusActive: String { L10n.text("returns.status.active", "Active status") }
         static var dateTBD: String { L10n.text("returns.date.tbd", "Return date TBD") }
+        static var sortMenuTitle: String { L10n.text("returns.sort.menu.title", "Sort menu title") }
+        static var sortNearestReturnDate: String { L10n.text("returns.sort.return_date.nearest", "Sort by nearest return date") }
+        static var sortFarthestReturnDate: String { L10n.text("returns.sort.return_date.farthest", "Sort by farthest return date") }
+        static var sortNewestAdded: String { L10n.text("returns.sort.created_at.newest", "Sort by newest added date") }
+        static var sortOldestAdded: String { L10n.text("returns.sort.created_at.oldest", "Sort by oldest added date") }
 
         static func lastDay(_ date: String) -> String {
             let format = L10n.text("returns.last_day.format", "Last day format")

@@ -18,13 +18,14 @@ struct ReturnsRootView: View {
     @StateObject private var viewModel: ReturnsRootViewModel
     @State private var selectedItem: ReturnItem?
     @State private var searchText: String = ""
+    @State private var sortOption: ReturnsSortOption = .returnDateNearest
 
     init(viewModel: ReturnsRootViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
     }
 
     private var displayedItems: [ReturnItemCellViewModel] {
-        viewModel.items(for: segment, matching: searchText)
+        viewModel.items(for: segment, matching: searchText, sortedBy: sortOption)
     }
 
     private var searchBar: some View {
@@ -34,6 +35,27 @@ struct ReturnsRootView: View {
             leadingAccessory: {
                 Image(systemName: "magnifyingglass")
                     .font(.subheadline)
+            },
+            trailingAccessory: {
+                Menu {
+                    ForEach(ReturnsSortOption.allCases) { option in
+                        Button {
+                            sortOption = option
+                        } label: {
+                            HStack {
+                                Text(option.title)
+                                if sortOption == option {
+                                    Image(systemName: "checkmark")
+                                }
+                            }
+                        }
+                    }
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down.circle")
+                        .font(.headline)
+                        .foregroundStyle(.secondary)
+                        .accessibilityLabel(L10n.Returns.sortMenuTitle)
+                }
             }
         )
     }
