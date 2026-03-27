@@ -89,28 +89,16 @@ struct ReturnDetailsView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     SectionHeaderView(title: L10n.Details.actions)
 
-                    // Primary and secondary actions stacked for quick access.
-                    VStack(spacing: 12) {
-                        Button(action: {
-                            if viewModel.markReturned() {
-                                onUpdate()
-                            }
-                        }) {
-                            Text(L10n.Returns.actionMarkReturned)
-                                .frame(maxWidth: .infinity)
+                    Button(action: {
+                        if viewModel.markReturned() {
+                            onUpdate()
                         }
-                        .buttonStyle(.borderedProminent)
-
-                        Button(action: {
-                            if viewModel.archive() {
-                                onUpdate()
-                            }
-                        }) {
-                            Text(L10n.Returns.actionArchive)
-                                .frame(maxWidth: .infinity)
-                        }
-                        .buttonStyle(.bordered)
+                    }) {
+                        Text(L10n.Returns.actionMarkReturned)
+                            .frame(maxWidth: .infinity)
                     }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(viewModel.isReturned)
                 }
             }
             .padding()
@@ -200,4 +188,3 @@ private final class PreviewReturnItemRepository: ReturnItemRepository {
     ReturnDetailsView(viewModel: ReturnDetailsViewModel(item: item, repository: repository)) {}
 }
 #endif
-

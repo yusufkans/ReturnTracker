@@ -13,20 +13,20 @@ protocol ProductMainCellPresentable {
     var subtitleText: String { get }
     var badgeText: String { get }
     var primaryButtonTitle: String { get }
-    var secondaryButtonTitle: String { get }
+    var secondaryButtonTitle: String? { get }
 }
 
 struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
     private let viewModel: ViewModel
     private let onCellTap: () -> Void
     private let onPrimaryTap: () -> Void
-    private let onSecondaryTap: () -> Void
+    private let onSecondaryTap: (() -> Void)?
 
     init(
         viewModel: ViewModel,
         onCellTap: @escaping () -> Void,
         onPrimaryTap: @escaping () -> Void,
-        onSecondaryTap: @escaping () -> Void
+        onSecondaryTap: (() -> Void)? = nil
     ) {
         self.viewModel = viewModel
         self.onCellTap = onCellTap
@@ -61,14 +61,15 @@ struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
 
                 HStack(spacing: 12) {
                     Button(viewModel.primaryButtonTitle, action: onPrimaryTap)
-                        .buttonStyle(.bordered)
-                        .frame(width: .infinity)
-                    
-                    Spacer()
-                    
-                    Button(viewModel.secondaryButtonTitle, action: onSecondaryTap)
-                        .buttonStyle(.plain)
-                        .frame(width: .infinity)
+                        .buttonStyle(.borderedProminent)
+                        .frame(maxWidth: .infinity)
+
+                    if let secondaryButtonTitle = viewModel.secondaryButtonTitle,
+                       let onSecondaryTap {
+                        Button(secondaryButtonTitle, action: onSecondaryTap)
+                            .buttonStyle(.plain)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
             }
         }
@@ -84,7 +85,7 @@ private struct PreviewModel: ProductMainCellPresentable {
     let subtitleText = L10n.Preview.productSubtitle
     let badgeText = L10n.Preview.productBadge
     let primaryButtonTitle = L10n.Returns.actionReturned
-    let secondaryButtonTitle = L10n.Returns.actionArchive
+    let secondaryButtonTitle: String? = nil
 }
 
 #Preview {
