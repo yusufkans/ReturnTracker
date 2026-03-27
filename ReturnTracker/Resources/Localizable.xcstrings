@@ -769,6 +769,23 @@
         }
       }
     },
+    "returns.search.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Search returns"
+          }
+        },
+        "tr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İadelerde ara"
+          }
+        }
+      }
+    },
     "returns.segment.active" : {
       "extractionState" : "manual",
       "localizations" : {

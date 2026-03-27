@@ -59,6 +59,7 @@ enum L10n {
 
     enum Returns {
         static var title: String { L10n.text("returns.title", "Returns title") }
+        static var searchPlaceholder: String { L10n.text("returns.search.placeholder", "Returns search placeholder") }
         static var segmentPicker: String { L10n.text("returns.segment.picker", "Returns segment picker title") }
         static var segmentActive: String { L10n.text("returns.segment.active", "Active segment") }
         static var segmentArchive: String { L10n.text("returns.segment.archive", "Archive segment") }
