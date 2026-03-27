@@ -25,7 +25,10 @@ struct ReturnTrackerApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView(tabFactory: DefaultTabFactory(container: container))
+            ContentView(
+                tabFactory: DefaultTabFactory(container: container),
+                signInUseCase: container.signInUseCase
+            )
         }
     }
 }
