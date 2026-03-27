@@ -14,8 +14,6 @@ struct ReturnItemCellViewModel: Identifiable, ProductMainCellPresentable {
     let titleText: String
     let subtitleText: String
     let badgeText: String
-    let primaryButtonTitle: String
-    let secondaryButtonTitle: String
     let item: ReturnItem
 }
 
@@ -99,11 +97,6 @@ final class ReturnsRootViewModel: ObservableObject {
         updateReturnStatus(for: item, isReturned: true)
     }
 
-    @discardableResult
-    func toggleArchive(for item: ReturnItem) -> Bool {
-        updateReturnStatus(for: item, isReturned: item.isReturned == false)
-    }
-
     func makeDetailsViewModel(for item: ReturnItem) -> ReturnDetailsViewModel {
         ReturnDetailsViewModel(item: item, repository: repository)
     }
@@ -178,12 +171,6 @@ private extension ReturnItemCellViewModel {
         titleText = item.title
         subtitleText = ReturnItemCellViewModel.makeSubtitle(for: item)
         badgeText = ReturnItemCellViewModel.makeBadgeText(for: item)
-        primaryButtonTitle = item.isReturned
-            ? L10n.Returns.actionReturned
-            : L10n.Returns.actionMarkReturned
-        secondaryButtonTitle = item.isReturned
-            ? L10n.Returns.actionUnarchive
-            : L10n.Returns.actionArchive
         self.item = item
     }
 

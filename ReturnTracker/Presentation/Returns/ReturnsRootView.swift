@@ -82,20 +82,12 @@ struct ReturnsRootView: View {
                         onCellTap: {
                             selectedItem = item.item
                         },
-                        onPrimaryTap: {
+                        isReturned: item.item.isReturned,
+                        onMarkReturned: {
                             withAnimation(AppAnimation.action) {
                                 viewModel.markReturned(for: item.item)
                             }
                             viewModel.showToast(message: L10n.Toast.markedAsReturned)
-                        },
-                        onSecondaryTap: {
-                            let message = item.item.isReturned
-                                ? L10n.Toast.unarchived
-                                : L10n.Toast.archived
-                            withAnimation(AppAnimation.action) {
-                                viewModel.toggleArchive(for: item.item)
-                            }
-                            viewModel.showToast(message: message)
                         }
                     )
                     .transition(AppAnimation.listItemTransition)
