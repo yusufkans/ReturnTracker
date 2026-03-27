@@ -12,31 +12,34 @@ protocol ProductMainCellPresentable {
     var titleText: String { get }
     var subtitleText: String { get }
     var badgeText: String { get }
-    var primaryButtonTitle: String { get }
-    var secondaryButtonTitle: String { get }
 }
 
 struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
     private let viewModel: ViewModel
     private let onCellTap: () -> Void
-    private let onPrimaryTap: () -> Void
-    private let onSecondaryTap: () -> Void
+    private let onMarkReturned: () -> Void
+    private let isReturned: Bool
+
+    @State private var horizontalOffset: CGFloat = 0
 
     init(
         viewModel: ViewModel,
         onCellTap: @escaping () -> Void,
-        onPrimaryTap: @escaping () -> Void,
-        onSecondaryTap: @escaping () -> Void
+        isReturned: Bool,
+        onMarkReturned: @escaping () -> Void
     ) {
         self.viewModel = viewModel
         self.onCellTap = onCellTap
-        self.onPrimaryTap = onPrimaryTap
-        self.onSecondaryTap = onSecondaryTap
+        self.isReturned = isReturned
+        self.onMarkReturned = onMarkReturned
     }
     
     var body: some View {
         RoundedCardCell {
-            VStack(alignment: .leading, spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(Color.green.opacity(swipeProgress * 0.25))
+
                 HStack(alignment: .top, spacing: 12) {
                     VStack(alignment: .leading, spacing: 6) {
                         Text(viewModel.titleText)
@@ -58,24 +61,38 @@ struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
                                 .fill(Color(.secondarySystemBackground))
                         )
                 }
-
-                HStack(spacing: 12) {
-                    Button(viewModel.primaryButtonTitle, action: onPrimaryTap)
-                        .buttonStyle(.bordered)
-                        .frame(width: .infinity)
-                    
-                    Spacer()
-                    
-                    Button(viewModel.secondaryButtonTitle, action: onSecondaryTap)
-                        .buttonStyle(.plain)
-                        .frame(width: .infinity)
-                }
             }
+            .offset(x: horizontalOffset)
+            .gesture(swipeGesture)
+            .animation(.easeOut(duration: 0.2), value: horizontalOffset)
         }
         .shadow(color: Color.green, radius: 0.1, x: -4)
         .onTapGesture {
             onCellTap()
         }
+    }
+
+    private var swipeGesture: some Gesture {
+        DragGesture(minimumDistance: 10, coordinateSpace: .local)
+            .onChanged { value in
+                guard isReturned == false else { return }
+                horizontalOffset = max(0, min(value.translation.width, 130))
+            }
+            .onEnded { _ in
+                guard isReturned == false else {
+                    horizontalOffset = 0
+                    return
+                }
+
+                if horizontalOffset >= 90 {
+                    onMarkReturned()
+                }
+                horizontalOffset = 0
+            }
+    }
+
+    private var swipeProgress: CGFloat {
+        min(max(horizontalOffset / 130, 0), 1)
     }
 }
 
@@ -83,11 +100,9 @@ private struct PreviewModel: ProductMainCellPresentable {
     let titleText = L10n.Preview.productTitle
     let subtitleText = L10n.Preview.productSubtitle
     let badgeText = L10n.Preview.productBadge
-    let primaryButtonTitle = L10n.Returns.actionReturned
-    let secondaryButtonTitle = L10n.Returns.actionArchive
 }
 
 #Preview {
-    ProductMainCell(viewModel: PreviewModel(), onCellTap: {}, onPrimaryTap: {}, onSecondaryTap: {})
+    ProductMainCell(viewModel: PreviewModel(), onCellTap: {}, isReturned: false, onMarkReturned: {})
         .padding()
 }
