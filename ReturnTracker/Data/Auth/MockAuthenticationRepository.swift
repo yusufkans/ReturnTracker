@@ -14,9 +14,9 @@ enum AuthenticationError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidCredentials:
-            return "E-posta veya şifre hatalı."
+            return L10n.Auth.invalidCredentials
         case .invalidEmailFormat:
-            return "Geçerli bir e-posta adresi gir."
+            return L10n.Auth.invalidEmailFormat
         }
     }
 }

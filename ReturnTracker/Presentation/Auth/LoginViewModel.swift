@@ -41,7 +41,7 @@ final class LoginViewModel: ObservableObject {
             )
             onAuthenticated(session)
         } catch {
-            errorMessage = (error as? LocalizedError)?.errorDescription ?? "Beklenmeyen bir hata oluştu."
+            errorMessage = (error as? LocalizedError)?.errorDescription ?? L10n.Auth.unknownError
         }
 
         isLoading = false

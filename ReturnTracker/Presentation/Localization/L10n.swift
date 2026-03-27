@@ -106,4 +106,18 @@ enum L10n {
         static var itemName: String { L10n.text("preview.item_name", "Preview item name") }
         static var storeName: String { L10n.text("preview.store_name", "Preview store name") }
     }
+
+    enum Auth {
+        static var welcomeTitle: String { L10n.text("auth.welcome_title", "Welcome title in login screen") }
+        static var welcomeMessage: String { L10n.text("auth.welcome_message", "Welcome subtitle in login screen") }
+        static var emailLabel: String { L10n.text("auth.email.label", "Email field label in login screen") }
+        static var emailPlaceholder: String { L10n.text("auth.email.placeholder", "Email field placeholder in login screen") }
+        static var passwordLabel: String { L10n.text("auth.password.label", "Password field label in login screen") }
+        static var passwordPlaceholder: String { L10n.text("auth.password.placeholder", "Password field placeholder in login screen") }
+        static var signIn: String { L10n.text("auth.action.sign_in", "Sign in button title") }
+        static var signingIn: String { L10n.text("auth.action.signing_in", "Signing in loading button title") }
+        static var unknownError: String { L10n.text("auth.error.unknown", "Unknown auth error message") }
+        static var invalidCredentials: String { L10n.text("auth.error.invalid_credentials", "Invalid credentials error message") }
+        static var invalidEmailFormat: String { L10n.text("auth.error.invalid_email_format", "Invalid email error message") }
+    }
 }

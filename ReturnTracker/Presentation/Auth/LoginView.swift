@@ -51,10 +51,10 @@ struct LoginView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("Hoş geldin 👋")
+            Text(L10n.Auth.welcomeTitle)
                 .font(.system(size: 34, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
-            Text("ReturnTracker hesabına giriş yap ve iadelerini takip etmeye devam et.")
+            Text(L10n.Auth.welcomeMessage)
                 .font(.subheadline)
                 .foregroundStyle(.white.opacity(0.86))
                 .multilineTextAlignment(.leading)
@@ -65,9 +65,9 @@ struct LoginView: View {
     private var formCard: some View {
         VStack(spacing: 18) {
             credentialField(
-                title: "E-posta",
+                title: L10n.Auth.emailLabel,
                 systemImage: "envelope.fill",
-                prompt: "name@company.com",
+                prompt: L10n.Auth.emailPlaceholder,
                 text: $viewModel.email
             )
             .textInputAutocapitalization(.never)
@@ -75,9 +75,9 @@ struct LoginView: View {
             .autocorrectionDisabled(true)
 
             credentialField(
-                title: "Şifre",
+                title: L10n.Auth.passwordLabel,
                 systemImage: "lock.fill",
-                prompt: "••••••••",
+                prompt: L10n.Auth.passwordPlaceholder,
                 text: $viewModel.password,
                 isSecure: true
             )
@@ -102,7 +102,7 @@ struct LoginView: View {
                     } else {
                         Image(systemName: "arrow.right.circle.fill")
                     }
-                    Text(viewModel.isLoading ? "Giriş Yapılıyor" : "Giriş Yap")
+                    Text(viewModel.isLoading ? L10n.Auth.signingIn : L10n.Auth.signIn)
                         .font(.headline)
                 }
                 .frame(maxWidth: .infinity)
