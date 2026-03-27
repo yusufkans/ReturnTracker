@@ -19,6 +19,28 @@ struct ReturnItemCellViewModel: Identifiable, ProductMainCellPresentable {
     let item: ReturnItem
 }
 
+enum ReturnsSortOption: String, CaseIterable, Identifiable {
+    case returnDateNearest
+    case returnDateFarthest
+    case newestAdded
+    case oldestAdded
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .returnDateNearest:
+            return L10n.Returns.sortNearestReturnDate
+        case .returnDateFarthest:
+            return L10n.Returns.sortFarthestReturnDate
+        case .newestAdded:
+            return L10n.Returns.sortNewestAdded
+        case .oldestAdded:
+            return L10n.Returns.sortOldestAdded
+        }
+    }
+}
+
 @MainActor
 final class ReturnsRootViewModel: ObservableObject {
     @Published private(set) var items: [ReturnItem] = []
@@ -41,7 +63,11 @@ final class ReturnsRootViewModel: ObservableObject {
         }
     }
 
-    func items(for segment: ReturnsPageSegments, matching query: String = "") -> [ReturnItemCellViewModel] {
+    func items(
+        for segment: ReturnsPageSegments,
+        matching query: String = "",
+        sortedBy sortOption: ReturnsSortOption = .returnDateNearest
+    ) -> [ReturnItemCellViewModel] {
         let normalizedQuery = query.normalizedForSearch
         let filtered = items.filter { item in
             let matchesSegment: Bool
@@ -61,7 +87,11 @@ final class ReturnsRootViewModel: ObservableObject {
 
             return item.matchesSearchQuery(normalizedQuery)
         }
-        return filtered.map { ReturnItemCellViewModel(from: $0) }
+
+        let sorted = filtered.sorted { lhs, rhs in
+            sortOption.areInIncreasingOrder(lhs: lhs, rhs: rhs)
+        }
+        return sorted.map { ReturnItemCellViewModel(from: $0) }
     }
 
     @discardableResult
@@ -96,6 +126,34 @@ final class ReturnsRootViewModel: ObservableObject {
             return true
         } catch {
             return false
+        }
+    }
+}
+
+private extension ReturnsSortOption {
+    func areInIncreasingOrder(lhs: ReturnItem, rhs: ReturnItem) -> Bool {
+        switch self {
+        case .returnDateNearest:
+            return compareByReturnDate(lhs: lhs, rhs: rhs, ascending: true)
+        case .returnDateFarthest:
+            return compareByReturnDate(lhs: lhs, rhs: rhs, ascending: false)
+        case .newestAdded:
+            return lhs.createdAt > rhs.createdAt
+        case .oldestAdded:
+            return lhs.createdAt < rhs.createdAt
+        }
+    }
+
+    private func compareByReturnDate(lhs: ReturnItem, rhs: ReturnItem, ascending: Bool) -> Bool {
+        switch (lhs.returnDate, rhs.returnDate) {
+        case let (left?, right?):
+            return ascending ? (left < right) : (left > right)
+        case (nil, nil):
+            return lhs.createdAt > rhs.createdAt
+        case (nil, _?):
+            return false
+        case (_?, nil):
+            return true
         }
     }
 }
