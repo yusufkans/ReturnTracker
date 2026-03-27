@@ -8,13 +8,8 @@
 import Foundation
 import SwiftUI
 
-enum ReturnsPageSegments: Hashable {
-    case active
-    case archive
-}
-
 struct ReturnsRootView: View {
-    @State var segment: ReturnsPageSegments = .active
+    @State private var segment: ReturnItemStatusSegment = .active
     @StateObject private var viewModel: ReturnsRootViewModel
     @State private var selectedItem: ReturnItem?
     @State private var searchText: String = ""
@@ -67,9 +62,9 @@ struct ReturnsRootView: View {
 
                 Picker(L10n.Returns.segmentPicker, selection: $segment) {
                     Text(L10n.Returns.segmentActive)
-                        .tag(ReturnsPageSegments.active)
-                    Text(L10n.Returns.segmentArchive)
-                        .tag(ReturnsPageSegments.archive)
+                        .tag(ReturnItemStatusSegment.active)
+                    Text(L10n.Returns.segmentReturned)
+                        .tag(ReturnItemStatusSegment.returned)
                 }
                 .pickerStyle(.segmented)
             }

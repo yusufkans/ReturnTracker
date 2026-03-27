@@ -62,11 +62,9 @@ enum L10n {
         static var searchPlaceholder: String { L10n.text("returns.search.placeholder", "Returns search placeholder") }
         static var segmentPicker: String { L10n.text("returns.segment.picker", "Returns segment picker title") }
         static var segmentActive: String { L10n.text("returns.segment.active", "Active segment") }
-        static var segmentArchive: String { L10n.text("returns.segment.archive", "Archive segment") }
+        static var segmentReturned: String { L10n.text("returns.segment.returned", "Returned segment") }
         static var actionReturned: String { L10n.text("returns.action.returned", "Returned action") }
         static var actionMarkReturned: String { L10n.text("returns.action.mark_returned", "Mark returned action") }
-        static var actionArchive: String { L10n.text("returns.action.archive", "Archive action") }
-        static var actionUnarchive: String { L10n.text("returns.action.unarchive", "Unarchive action") }
         static var statusReturned: String { L10n.text("returns.status.returned", "Returned status") }
         static var statusActive: String { L10n.text("returns.status.active", "Active status") }
         static var dateTBD: String { L10n.text("returns.date.tbd", "Return date TBD") }
@@ -89,8 +87,6 @@ enum L10n {
 
     enum Toast {
         static var markedAsReturned: String { L10n.text("toast.marked_as_returned", "Marked as returned toast") }
-        static var archived: String { L10n.text("toast.archived", "Archived toast") }
-        static var unarchived: String { L10n.text("toast.unarchived", "Unarchived toast") }
     }
 
     enum Details {
