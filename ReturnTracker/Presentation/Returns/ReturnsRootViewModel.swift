@@ -14,8 +14,6 @@ struct ReturnItemCellViewModel: Identifiable, ProductMainCellPresentable {
     let titleText: String
     let subtitleText: String
     let badgeText: String
-    let primaryButtonTitle: String
-    let secondaryButtonTitle: String?
     let item: ReturnItem
 }
 
@@ -178,10 +176,6 @@ private extension ReturnItemCellViewModel {
         titleText = item.title
         subtitleText = ReturnItemCellViewModel.makeSubtitle(for: item)
         badgeText = ReturnItemCellViewModel.makeBadgeText(for: item)
-        primaryButtonTitle = item.isReturned
-            ? L10n.Returns.actionReturned
-            : L10n.Returns.actionMarkReturned
-        secondaryButtonTitle = nil
         self.item = item
     }
 

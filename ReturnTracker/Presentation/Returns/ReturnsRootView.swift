@@ -77,13 +77,12 @@ struct ReturnsRootView: View {
                         onCellTap: {
                             selectedItem = item.item
                         },
-                        onPrimaryTap: {
-                            let isMarked = withAnimation(AppAnimation.action) {
+                        isReturned: item.item.isReturned,
+                        onMarkReturned: {
+                            withAnimation(AppAnimation.action) {
                                 viewModel.markReturned(for: item.item)
                             }
-                            if isMarked {
-                                viewModel.showToast(message: L10n.Toast.markedAsReturned)
-                            }
+                            viewModel.showToast(message: L10n.Toast.markedAsReturned)
                         }
                     )
                     .transition(AppAnimation.listItemTransition)

@@ -12,68 +12,61 @@ protocol ProductMainCellPresentable {
     var titleText: String { get }
     var subtitleText: String { get }
     var badgeText: String { get }
-    var primaryButtonTitle: String { get }
-    var secondaryButtonTitle: String? { get }
 }
 
 struct ProductMainCell<ViewModel: ProductMainCellPresentable>: View {
     private let viewModel: ViewModel
     private let onCellTap: () -> Void
-    private let onPrimaryTap: () -> Void
-    private let onSecondaryTap: (() -> Void)?
+    private let onMarkReturned: () -> Void
+    private let isReturned: Bool
 
     init(
         viewModel: ViewModel,
         onCellTap: @escaping () -> Void,
-        onPrimaryTap: @escaping () -> Void,
-        onSecondaryTap: (() -> Void)? = nil
+        isReturned: Bool,
+        onMarkReturned: @escaping () -> Void
     ) {
         self.viewModel = viewModel
         self.onCellTap = onCellTap
-        self.onPrimaryTap = onPrimaryTap
-        self.onSecondaryTap = onSecondaryTap
+        self.isReturned = isReturned
+        self.onMarkReturned = onMarkReturned
     }
     
     var body: some View {
-        RoundedCardCell {
-            VStack(alignment: .leading, spacing: 12) {
-                HStack(alignment: .top, spacing: 12) {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(viewModel.titleText)
-                            .font(.headline)
-                        Text(viewModel.subtitleText)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-
-                    Spacer(minLength: 0)
-
-                    Text(viewModel.badgeText)
-                        .font(.headline)
-                        .foregroundStyle(.primary)
-                        .padding(.horizontal, 12)
-                        .padding(.vertical, 8)
-                        .background(
-                            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                                .fill(Color(.secondarySystemBackground))
-                        )
-                }
-
-                HStack(spacing: 12) {
-                    Button(viewModel.primaryButtonTitle, action: onPrimaryTap)
-                        .buttonStyle(.borderedProminent)
-                        .frame(maxWidth: .infinity)
-
-                    if let secondaryButtonTitle = viewModel.secondaryButtonTitle,
-                       let onSecondaryTap {
-                        Button(secondaryButtonTitle, action: onSecondaryTap)
-                            .buttonStyle(.plain)
-                            .frame(maxWidth: .infinity)
-                    }
-                }
-            }
+        RoundedCardCell(
+            swipeAction: .init(
+                title: L10n.Returns.actionMarkReturned,
+                isEnabled: isReturned == false,
+                onTrigger: onMarkReturned
+            )
+        ) {
+            content
         }
         .shadow(color: Color.green, radius: 0.1, x: -4)
+    }
+
+    private var content: some View {
+        HStack(alignment: .top, spacing: 12) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text(viewModel.titleText)
+                    .font(.headline)
+                Text(viewModel.subtitleText)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+            }
+
+            Spacer(minLength: 0)
+
+            Text(viewModel.badgeText)
+                .font(.headline)
+                .foregroundStyle(.primary)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(Color(.secondarySystemBackground))
+                )
+        }
         .onTapGesture {
             onCellTap()
         }
@@ -84,11 +77,9 @@ private struct PreviewModel: ProductMainCellPresentable {
     let titleText = L10n.Preview.productTitle
     let subtitleText = L10n.Preview.productSubtitle
     let badgeText = L10n.Preview.productBadge
-    let primaryButtonTitle = L10n.Returns.actionReturned
-    let secondaryButtonTitle: String? = nil
 }
 
 #Preview {
-    ProductMainCell(viewModel: PreviewModel(), onCellTap: {}, onPrimaryTap: {}, onSecondaryTap: {})
+    ProductMainCell(viewModel: PreviewModel(), onCellTap: {}, isReturned: false, onMarkReturned: {})
         .padding()
 }
